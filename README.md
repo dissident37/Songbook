@@ -16,6 +16,6 @@ Ziel des Projekts ist es, Webentwicklungskompetenzen zu demonstrieren und ein n�
 - [ ] Tag 5 – Deployment auf einem Server (VPS bei IONOS)
 
 ## Projektstruktur
-/src         → Quellcode der ASP.NET Core Anwendung
-/docs        → Dokumentation (z. B. docker-setup.md)
-/deploy      → Server- und CI/CD-Konfiguration
+/src         → Quellcode der ASP.NET Core Anwendung  
+/docs        → Dokumentation (z. B. docker-setup.md)  
+/deploy      → Server- und CI/CD-Konfiguration  
