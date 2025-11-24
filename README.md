@@ -14,3 +14,8 @@ Ziel des Projekts ist es, Webentwicklungskompetenzen zu demonstrieren und ein n�
 - [ ] Tag 3 – Datenbank anbinden  
 - [ ] Tag 4 – CRUD (Lieder hinzufügen und bearbeiten)  
 - [ ] Tag 5 – Deployment auf einem Server (VPS bei IONOS)
+
+## Projektstruktur
+/src         → Quellcode der ASP.NET Core Anwendung
+/docs        → Dokumentation (z. B. docker-setup.md)
+/deploy      → Server- und CI/CD-Konfiguration
