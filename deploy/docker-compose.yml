@@ -1,0 +1,27 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:16
+    container_name: songbook_db
+    restart: always
+    environment:
+      POSTGRES_DB: songbook
+      POSTGRES_USER: songuser
+      POSTGRES_PASSWORD: mysecretpassword
+    ports:
+      - "5432:5432"
+    volumes:
+      - songbook_data:/var/lib/postgresql/data
+
+  adminer:
+    image: adminer
+    container_name: songbook_adminer
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+
+volumes:
+  songbook_data:

@@ -1,0 +1,23 @@
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Songbook.Web.Data;
+using Songbook.Web.Models;
+using Microsoft.EntityFrameworkCore;
+
+namespace Songbook.Web.Pages.Songs;
+
+public class IndexModel : PageModel
+{
+    private readonly SongbookDbContext _context;
+
+    public IndexModel(SongbookDbContext context)
+    {
+        _context = context;
+    }
+
+    public IList<Song> SongList { get; set; } = [];
+
+    public async Task OnGetAsync()
+    {
+        SongList = await _context.Songs.ToListAsync();
+    }
+}
