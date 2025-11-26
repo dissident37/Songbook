@@ -1,14 +1,25 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.0.31903.59
+VisualStudioVersion = 17.14.36705.20 d17.14
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Songbook.Web", "src\Songbook.Web\Songbook.Web.csproj", "{2D007305-F466-AFD2-EA28-B50C0B47E48B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2D007305-F466-AFD2-EA28-B50C0B47E48B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D007305-F466-AFD2-EA28-B50C0B47E48B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D007305-F466-AFD2-EA28-B50C0B47E48B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D007305-F466-AFD2-EA28-B50C0B47E48B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {33F3D8AE-AB3C-4DB1-8DFD-9691F6D4CEAF}
 	EndGlobalSection
 EndGlobal
