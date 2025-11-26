@@ -1,0 +1,32 @@
+# Ignore Visual Studio files
+.vs/
+*.user
+*.suo
+*.cache
+*.dbmdl
+*.vcxproj.user
+
+# Build results
+bin/
+obj/
+out/
+
+# Other
+*.log
+*.tmp
+*.bak
+*.cache/
+*.dll
+*.pdb
+*.exe
+
+# ASP.NET generated
+Properties/launchSettings.json
+
+# VSCode
+.vscode/
+
+
+/src/Songbook.Web/obj/Debug/net8.0/rpswa.dswa.cache.json
+/src/Songbook.Web/obj/Debug/net8.0/Songbook.Web.AssemblyInfo.cs
+/src/Songbook.Web/obj/Debug/net8.0/Songbook.Web.AssemblyInfoInputs.cache
