@@ -30,7 +30,8 @@ app.UseRouting();
 // Authorization (not used yet, но пусть будет)
 app.UseAuthorization();
 
-// Это ГЛАВНАЯ СТРОКА:
+// Это ГЛАВНАЯ СТРОКА: // Razor Pages Routing
 app.MapRazorPages();
 
+// Anwendung starten
 app.Run();
