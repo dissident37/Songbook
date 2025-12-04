@@ -1,32 +1,56 @@
-# Ignore Visual Studio files
+# ============================
+# Visual Studio / Rider / VS Code
+# ============================
 .vs/
+.vscode/
+.idea/
+
 *.user
 *.suo
+*.rsuser
 *.cache
 *.dbmdl
 *.vcxproj.user
 
-# Build results
+# ============================
+# Build artifacts
+# ============================
 bin/
 obj/
 out/
+publish/
 
-# Other
+# ============================
+# Logging / Temp
+# ============================
 *.log
 *.tmp
 *.bak
 *.cache/
-*.dll
-*.pdb
-*.exe
 
-# ASP.NET generated
-Properties/launchSettings.json
+# ============================
+# ASP.NET Core
+# ============================
+# Keine individuellen Dateien aus obj/ – ganze Ordner ignorieren
+**/Properties/DataProtectionKeys/
 
-# VSCode
-.vscode/
+# launchSettings.json soll NICHT ignoriert werden!
+# (Deshalb entfernt)
 
+# ============================
+# Secrets / Environment
+# ============================
+.env
+*.env
 
-/src/Songbook.Web/obj/Debug/net8.0/rpswa.dswa.cache.json
-/src/Songbook.Web/obj/Debug/net8.0/Songbook.Web.AssemblyInfo.cs
-/src/Songbook.Web/obj/Debug/net8.0/Songbook.Web.AssemblyInfoInputs.cache
+# ============================
+# Betriebssystem
+# ============================
+Thumbs.db
+.DS_Store
+
+# ============================
+# Docker
+# ============================
+*.pid
+
