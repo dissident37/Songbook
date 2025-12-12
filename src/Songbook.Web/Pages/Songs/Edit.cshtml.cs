@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using Songbook.Web.Data;
 using Songbook.Web.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace Songbook.Web.Pages.Songs;
 
@@ -16,23 +16,59 @@ public class EditModel : PageModel
     }
 
     [BindProperty]
-    public Song Song { get; set; } = default!;
+    public SongInputModel Input { get; set; } = new();
+
+    public int SongId { get; set; }
+
+    public class SongInputModel
+    {
+        public string Title { get; set; } = "";
+        public string ArtistName { get; set; } = "";
+        public string Content { get; set; } = "";
+    }
 
     public async Task<IActionResult> OnGetAsync(int id)
     {
-        Song? s = await _context.Songs.FirstOrDefaultAsync(x => x.Id == id);
+        SongId = id;
 
-        if (s == null)
+        var song = await _context.Songs
+            .Include(s => s.Artist)
+            .FirstOrDefaultAsync(s => s.Id == id);
+
+        if (song == null)
             return NotFound();
 
-        Song = s;
+        Input.Title = song.Title;
+        Input.ArtistName = song.Artist.Name;
+        Input.Content = song.Content;
+
         return Page();
     }
 
-    public async Task<IActionResult> OnPostAsync()
+    public async Task<IActionResult> OnPostAsync(int id)
     {
-        _context.Songs.Update(Song);
+        var song = await _context.Songs.FindAsync(id);
+        if (song == null)
+            return NotFound();
+
+        // обновление артиста
+        var artist = await _context.Artists
+            .FirstOrDefaultAsync(a => a.Name == Input.ArtistName);
+
+        if (artist == null)
+        {
+            artist = new Artist { Name = Input.ArtistName };
+            await _context.Artists.AddAsync(artist);
+            await _context.SaveChangesAsync();
+        }
+
+        song.Title = Input.Title;
+        song.ArtistId = artist.Id;
+        song.Content = Input.Content;
+        song.ContentPlain = System.Text.RegularExpressions.Regex.Replace(Input.Content, @"\[[^\]]+\]", "");
+
         await _context.SaveChangesAsync();
+
         return RedirectToPage("Index");
     }
 }

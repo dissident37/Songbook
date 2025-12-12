@@ -1,21 +1,22 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace Songbook.Web.Models;
 
 public class Song
 {
     public int Id { get; set; }
 
-    [Required, MaxLength(200)]
-    public string Title { get; set; } = string.Empty;
+    public string Title { get; set; } = "";
+    public int ArtistId { get; set; }
+    public Artist Artist { get; set; } = null!;
 
-    [MaxLength(200)]
-    public string? Artist { get; set; }
+    public string Content { get; set; } = "";        // текст с аккордами
+    public string ContentPlain { get; set; } = "";   // текст без аккордов
 
-    [Required]
-    public string Lyrics { get; set; } = string.Empty;
+    public int CreatedByUserId { get; set; }
+    public User CreatedByUser { get; set; } = null!;
 
-    public string? Chords { get; set; }
+    // связи M:N с аккордами
+    public List<SongChord> SongChords { get; set; } = new();
 
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    // связь с плейлистами (M:N)
+    public List<PlaylistSong> PlaylistSongs { get; set; } = new();
 }

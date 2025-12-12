@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Songbook.Web.Pages.Songs;
 
-public class IndexModel : PageModel
+public class SongIndexModel : PageModel
 {
     private readonly SongbookDbContext _context;
 
-    public IndexModel(SongbookDbContext context)
+    public SongIndexModel(SongbookDbContext context)
     {
         _context = context;
     }

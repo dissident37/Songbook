@@ -1,21 +1,21 @@
-@page "{id:int}"
-@model Songbook.Web.Pages.Songs.EditModel
+@page
+@model Songbook.Web.Pages.Songs.CreateModel
 
-<h1>Edit Song</h1>
+<h1>Create Song</h1>
 
 <form method="post">
     <div class="mb-3">
-        <label>Title</label>
+        <label class="form-label">Title</label>
         <input class="form-control" asp-for="Input.Title" />
     </div>
 
     <div class="mb-3">
-        <label>Artist</label>
+        <label class="form-label">Artist</label>
         <input class="form-control" asp-for="Input.ArtistName" />
     </div>
 
     <div class="mb-3">
-        <label>Content (with chords)</label>
+        <label class="form-label">Content (with chords)</label>
         <textarea class="form-control" rows="10" asp-for="Input.Content"></textarea>
     </div>
 

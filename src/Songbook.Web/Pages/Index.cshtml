@@ -1,10 +1,32 @@
 ﻿@page
-@model IndexModel
-@{
-    ViewData["Title"] = "Home page";
-}
+@model Songbook.Web.Pages.IndexModel
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<h1>Songs</h1>
+
+<p>
+    <a class="btn btn-primary" asp-page="Create">Add Song</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Artist</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var song in Model.Songs)
+{
+        <tr>
+            <td>@song.Title</td>
+            <td>@song.Artist?.Name</td>
+            <td>
+                <a asp-page="Details" asp-route-id="@song.Id">View</a> |
+                <a asp-page="Edit" asp-route-id="@song.Id">Edit</a> |
+                <a asp-page="Delete" asp-route-id="@song.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -1,0 +1,14 @@
+@page "{id:int}"
+@model Songbook.Web.Pages.Songs.DeleteModel
+
+<h1>Delete Song</h1>
+
+<p>Are you sure you want to delete this song?</p>
+
+<h3>@Model.Song.Title</h3>
+<h4>@Model.Song.Artist?.Name</h4>
+
+<form method="post">
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a asp-page="Index" class="btn btn-secondary">Cancel</a>
+</form>

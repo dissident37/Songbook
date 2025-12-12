@@ -6,11 +6,11 @@ using Songbook.Web.Models;
 
 namespace Songbook.Web.Pages.Songs;
 
-public class DeleteModel : PageModel
+public class DetailsModel : PageModel
 {
     private readonly SongbookDbContext _context;
 
-    public DeleteModel(SongbookDbContext context)
+    public DetailsModel(SongbookDbContext context)
     {
         _context = context;
     }
@@ -27,17 +27,5 @@ public class DeleteModel : PageModel
             return NotFound();
 
         return Page();
-    }
-
-    public async Task<IActionResult> OnPostAsync(int id)
-    {
-        var song = await _context.Songs.FindAsync(id);
-        if (song != null)
-        {
-            _context.Songs.Remove(song);
-            await _context.SaveChangesAsync();
-        }
-
-        return RedirectToPage("Index");
     }
 }
