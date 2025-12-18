@@ -27,7 +27,7 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
             .HasOne(s => s.Artist)
             .WithMany(a => a.Songs)
             .HasForeignKey(s => s.ArtistId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.Cascade);
 
         // ---- Song ↔ User (1:N)
         modelBuilder.Entity<Song>()
@@ -43,7 +43,8 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
         modelBuilder.Entity<SongChord>()
             .HasOne(sc => sc.Song)
             .WithMany(s => s.SongChords)
-            .HasForeignKey(sc => sc.SongId);
+            .HasForeignKey(sc => sc.SongId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<SongChord>()
             .HasOne(sc => sc.Chord)
@@ -62,7 +63,8 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
         modelBuilder.Entity<PlaylistSong>()
             .HasOne(ps => ps.Song)
             .WithMany(s => s.PlaylistSongs)
-            .HasForeignKey(ps => ps.SongId);
+            .HasForeignKey(ps => ps.SongId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 
 }

@@ -18,6 +18,6 @@ public class SongIndexModel : PageModel
 
     public async Task OnGetAsync()
     {
-        SongList = await _context.Songs.ToListAsync();
+        SongList = await _context.Songs.Include(s => s.Artist).ToListAsync();
     }
 }

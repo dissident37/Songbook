@@ -1,29 +1,36 @@
 @page
 @model Songbook.Web.Pages.Songs.SongIndexModel
 
-<h1>Songs</h1>
+<h1 class="mb-3">Песни</h1>
 
-<table class="table">
+<table class="table table-hover">
     <thead>
         <tr>
-            <th>Title</th>
-            <th>Artist</th>
-            <th></th>
+            <th>Песня</th>
+            <th>Исполнитель</th>
         </tr>
     </thead>
     <tbody>
 @foreach (var song in Model.SongList)
 {
         <tr>
-            <td>@song.Title</td>
-            <td>@song.Artist</td>
             <td>
-                <a asp-page="Edit" asp-route-id="@song.Id">Edit</a> |
-                <a asp-page="Delete" asp-route-id="@song.Id">Delete</a>
+                <a asp-page="Details"
+                   asp-route-id="@song.Id"
+                   class="fw-semibold text-decoration-none">
+                    @song.Title
+                </a>
+            </td>
+            <td>
+                <a asp-page="/Artists/Details"
+                   asp-route-id="@song.Artist.Id"
+                   class="fw-semibold text-decoration-none">
+                @song.Artist.Name
+                </a>
             </td>
         </tr>
 }
     </tbody>
 </table>
 
-<a asp-page="Create">Add Song</a>
+<a asp-page="Create" class="btn btn-primary">➕ Добавить песню</a>

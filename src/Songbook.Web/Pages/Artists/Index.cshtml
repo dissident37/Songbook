@@ -1,0 +1,37 @@
+﻿@page
+@model Songbook.Web.Pages.Artists.IndexModel
+
+<h1 class="mb-4">Артисты</h1>
+<p class="text-muted">
+    Выберите артиста для просмотра песен
+</p>
+
+@if (!Model.Artists.Any())
+{
+    <p>Артисты не найдены.</p>
+}
+else
+{
+    <ul class="list-group">
+        @foreach (var artist in Model.Artists)
+        {
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <a asp-page="Details"
+                   asp-route-id="@artist.Id"
+                   class="fw-bold text-decoration-none">
+                    @artist.Name
+                </a>
+
+                <span class="text-muted">
+                    @artist.Songs.Count песен
+                </span>
+            </li>
+        }
+    </ul>
+}
+
+<hr />
+
+<a asp-page="Create" class="btn btn-sm btn-outline-secondary">
+    ➕ Добавить артиста
+</a>

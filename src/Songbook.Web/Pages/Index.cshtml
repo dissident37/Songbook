@@ -4,7 +4,7 @@
 <h1>Songs</h1>
 
 <p>
-    <a class="btn btn-primary" asp-page="Create">Add Song</a>
+    <a class="btn btn-primary" asp-page="/Songs/Create">Add Song</a>
 </p>
 
 <table class="table">
@@ -22,7 +22,7 @@
             <td>@song.Title</td>
             <td>@song.Artist?.Name</td>
             <td>
-                <a asp-page="Details" asp-route-id="@song.Id">View</a> |
+                <a asp-page="/Songs/Details" asp-route-id="@song.Id">View</a> |
                 <a asp-page="Edit" asp-route-id="@song.Id">Edit</a> |
                 <a asp-page="Delete" asp-route-id="@song.Id">Delete</a>
             </td>

@@ -11,9 +11,8 @@ public class Song
     public string Content { get; set; } = "";        // текст с аккордами
     public string ContentPlain { get; set; } = "";   // текст без аккордов
 
-    public int CreatedByUserId { get; set; }
-    public User CreatedByUser { get; set; } = null!;
-
+    public int? CreatedByUserId { get; set; }
+    public User? CreatedByUser { get; set; }
     // связи M:N с аккордами
     public List<SongChord> SongChords { get; set; } = new();
 

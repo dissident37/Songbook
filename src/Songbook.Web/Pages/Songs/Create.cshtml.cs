@@ -6,6 +6,7 @@ using Songbook.Web.Models;
 
 namespace Songbook.Web.Pages.Songs;
 
+
 public class CreateModel : PageModel
 {
     private readonly SongbookDbContext _context;
@@ -16,56 +17,79 @@ public class CreateModel : PageModel
     }
 
     [BindProperty]
-    public SongInputModel Input { get; set; } = new();
+    public InputModel Input { get; set; } = new();
 
-    public class SongInputModel
+    // найденные артисты
+    public List<Artist> FoundArtists { get; set; } = new();
+
+    public class InputModel
     {
         public string Title { get; set; } = "";
         public string ArtistName { get; set; } = "";
+        public int? SelectedArtistId { get; set; }
         public string Content { get; set; } = "";
     }
 
-    public void OnGet()
+    public async Task OnGetAsync(string? artistName)
     {
+        if (!string.IsNullOrWhiteSpace(artistName))
+        {
+            FoundArtists = await _context.Artists
+                .Where(a => a.Name.ToLower().Contains(artistName.ToLower()))
+                .OrderBy(a => a.Name)
+                .ToListAsync();
+
+            Input.ArtistName = artistName;
+        }
     }
 
     public async Task<IActionResult> OnPostAsync()
     {
-        if (!ModelState.IsValid)
-            return Page();
+        Artist artist;
 
-        // --- Найти или создать исполнителя ---
-        var artist = await _context.Artists
-            .FirstOrDefaultAsync(a => a.Name == Input.ArtistName);
-
-        if (artist == null)
+        if (Input.SelectedArtistId.HasValue)
         {
-            artist = new Artist { Name = Input.ArtistName };
-            _context.Artists.Add(artist);
-            await _context.SaveChangesAsync(); // Нужно, чтобы появился Id
+            // пользователь выбрал существующего артиста
+            artist = await _context.Artists.FindAsync(Input.SelectedArtistId.Value)
+                     ?? throw new Exception("Artist not found");
         }
+        else
+        {
+            // создаём нового артиста
+            artist = new Artist
+            {
+                Name = Input.ArtistName.Trim()
+            };
 
-        // --- Создаём ContentPlain ---
-        var contentPlain = RemoveChords(Input.Content);
+            _context.Artists.Add(artist);
+            await _context.SaveChangesAsync();
+        }
 
         var song = new Song
         {
             Title = Input.Title,
-            ArtistId = artist.Id,
             Content = Input.Content,
-            ContentPlain = contentPlain,
-            CreatedByUserId = 1 // временно, пока нет авторизации
+            ArtistId = artist.Id
         };
 
         _context.Songs.Add(song);
         await _context.SaveChangesAsync();
 
-        return RedirectToPage("Index");
+        return RedirectToPage("/Artists/Details", new { id = artist.Id });
     }
 
-    private string RemoveChords(string content)
+    public async Task<IActionResult> OnGetSearchArtistsAsync(string term)
     {
-        // Очень простой очиститель: убираем аккорды вида [Am], [G], etc.
-        return System.Text.RegularExpressions.Regex.Replace(content, @"\[[^\]]+\]", "");
+        if (string.IsNullOrWhiteSpace(term))
+            return new JsonResult(Array.Empty<object>());
+
+        var artists = await _context.Artists
+            .Where(a => a.Name.ToLower().Contains(term.ToLower()))
+            .OrderBy(a => a.Name)
+            .Take(5)
+            .Select(a => new { a.Id, a.Name })
+            .ToListAsync();
+
+        return new JsonResult(artists);
     }
 }
