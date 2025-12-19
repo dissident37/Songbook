@@ -20,7 +20,10 @@ public class EditModel : PageModel
 
     public async Task<IActionResult> OnGetAsync(int id)
     {
-        Artist = await _context.Artists.FindAsync(id);
+        Artist = await _context.Artists
+            .AsNoTracking()
+            .FirstOrDefaultAsync(a => a.Id == id);
+
         if (Artist == null)
             return NotFound();
 
@@ -32,9 +35,16 @@ public class EditModel : PageModel
         if (!ModelState.IsValid)
             return Page();
 
-        _context.Attach(Artist).State = EntityState.Modified;
+        // 🔑 Загружаем сущность из БД
+        var artistFromDb = await _context.Artists.FindAsync(Artist.Id);
+        if (artistFromDb == null)
+            return NotFound();
+
+        // 🔑 Обновляем ТОЛЬКО поля артиста
+        artistFromDb.Name = Artist.Name;
+
         await _context.SaveChangesAsync();
 
-        return RedirectToPage("Index");
+        return RedirectToPage("./Details", new { id = artistFromDb.Id });
     }
 }
