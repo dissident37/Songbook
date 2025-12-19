@@ -13,11 +13,13 @@
                class="form-control"
                id="artistInput"
                name="Input.ArtistName"
+               value="@Model.Input.ArtistName"
                autocomplete="off" />
 
         <input type="hidden"
                id="artistIdInput"
-               name="Input.SelectedArtistId" />
+               name="Input.SelectedArtistId"
+               value="@Model.Input.SelectedArtistId" />
 
         <ul class="list-group position-absolute w-100"
             id="artistSuggestions"

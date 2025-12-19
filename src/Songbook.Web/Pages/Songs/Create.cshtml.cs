@@ -30,8 +30,21 @@ public class CreateModel : PageModel
         public string Content { get; set; } = "";
     }
 
-    public async Task OnGetAsync(string? artistName)
+    public async Task OnGetAsync(int? artistId, string? artistName)
     {
+        if (artistId.HasValue)
+        {
+            var artist = await _context.Artists.FindAsync(artistId.Value);
+            if (artist != null)
+            {
+                Input.ArtistName = artist.Name;
+                Input.SelectedArtistId = artist.Id;
+            }
+
+            // важно: если пришли по artistId — поиск не нужен
+            return;
+        }
+
         if (!string.IsNullOrWhiteSpace(artistName))
         {
             FoundArtists = await _context.Artists
