@@ -1,32 +1,15 @@
 ﻿@page
 @model Songbook.Web.Pages.IndexModel
 
-<h1>Songs</h1>
+<div class="py-4">
+    <h1 class="mb-3">Songbook</h1>
 
-<p>
-    <a class="btn btn-primary" asp-page="/Songs/Create">Add Song</a>
-</p>
+    <p class="lead">
+        Songbook — сайт для хранения текстов песен с аккордами.
+        Здесь можно собирать свою коллекцию, быстро находить и редактировать песни.
+    </p>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Title</th>
-            <th>Artist</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var song in Model.Songs)
-{
-        <tr>
-            <td>@song.Title</td>
-            <td>@song.Artist?.Name</td>
-            <td>
-                <a asp-page="/Songs/Details" asp-route-id="@song.Id">View</a> |
-                <a asp-page="Edit" asp-route-id="@song.Id">Edit</a> |
-                <a asp-page="Delete" asp-route-id="@song.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    <a class="btn btn-primary" asp-page="/Artists/Index">
+        Перейти к артистам
+    </a>
+</div>
