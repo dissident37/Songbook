@@ -1,18 +1,35 @@
 using Microsoft.EntityFrameworkCore;
 using Songbook.Web.Data;
+using Songbook.Web.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// ===== Services (Dienste registrieren) =====
 // Razor Pages
 builder.Services.AddRazorPages();
 
-// DB Context
+// Datenbank für deine App-Daten (Songs, Artists, Playlists, Users-Profil)
 builder.Services.AddDbContext<SongbookDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// Datenbank für Auth (ASP.NET Identity Tabellen: AspNetUsers, AspNetRoles, ...)
+builder.Services.AddDbContext<AuthDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// ASP.NET Core Identity (Registrierung / Login)
+builder.Services
+    .AddDefaultIdentity<ApplicationUser>(options =>
+    {
+        options.SignIn.RequireConfirmedAccount = false;
+        options.Password.RequiredLength = 6;
+        options.Password.RequireNonAlphanumeric = false;
+    })
+    .AddEntityFrameworkStores<AuthDbContext>();
+
 var app = builder.Build();
 
-// Error handling
+// ===== Pipeline (Reihenfolge der Middleware) =====
+// Fehlerbehandlung
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
@@ -21,17 +38,17 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// Static files (CSS/JS)
+// Statische Dateien (CSS/JS)
 app.UseStaticFiles();
 
 // Routing
 app.UseRouting();
 
-// Authorization (not used yet, но пусть будет)
+// Authentifizierung & Autorisierung (wichtig für [Authorize])
+app.UseAuthentication();
 app.UseAuthorization();
 
-// Это ГЛАВНАЯ СТРОКА: // Razor Pages Routing
+// Razor Pages Endpunkte
 app.MapRazorPages();
 
-// Anwendung starten
 app.Run();
