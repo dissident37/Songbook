@@ -92,3 +92,50 @@ Die folgenden Tabellen werden erstellt:
 - PostgreSQL
 - DBeaver
 - .NET 8 SDK
+
+## Authentication & Benutzerprofile
+
+Das Projekt verwendet **ASP.NET Core Identity** für Authentifizierung
+(Registrierung, Login, Logout) und eine **separate Users-Tabelle**
+für die fachliche Anwendungslogik.
+
+### Trennung von Account und Profil
+
+Es existieren bewusst zwei unterschiedliche Konzepte:
+
+### 1) Authentifizierungs-Account (ASP.NET Core Identity)
+- Tabellen: `AspNetUsers`, `AspNetRoles`, etc.
+- Verantwortlich für:
+  - Login / Logout
+  - Passwort-Hash
+  - Cookies & Security
+  - Passwort-Reset, E-Mail-Bestätigung (optional)
+
+Diese Tabellen werden automatisch von ASP.NET Core Identity verwaltet.
+
+### 2) Benutzerprofil (eigene Tabelle `Users`)
+- Verantwortlich für:
+  - Besitzer von Songs
+  - Besitzer von Playlists
+  - Anwendungslogik und Beziehungen im Domain-Modell
+
+Diese Tabelle ist **nicht** für Authentifizierung zuständig.
+
+### Verknüpfung zwischen Account und Profil
+
+- `AspNetUsers.Id` (string)
+  → gespeichert in `Users.IdentityUserId`
+- Beim ersten Login oder bei der Registrierung:
+  - wird automatisch ein Eintrag in der Tabelle `Users` erstellt (falls nicht vorhanden)
+  - die interne Profil-ID (`Users.Id`) wird als Claim (`ProfileId`) gesetzt
+
+Dadurch kann die Anwendung:
+- sicher authentifizieren (Identity)
+- gleichzeitig sauber mit eigenen Benutzerprofilen arbeiten
+
+### Vorteile dieser Architektur
+
+- klare Trennung von Security und Business-Logik
+- saubere und erweiterbare Architektur
+- realistische Production-Struktur
+- einfache Erweiterung (z. B. OAuth, Google Login)

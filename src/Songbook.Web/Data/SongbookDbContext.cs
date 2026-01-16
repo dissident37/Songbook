@@ -1,11 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using Songbook.Web.Models;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+
 
 namespace Songbook.Web.Data;
 
-public class SongbookDbContext : IdentityDbContext<User, IdentityRole<int>, int>
+public class SongbookDbContext : DbContext
 
 {
     public SongbookDbContext(DbContextOptions<SongbookDbContext> options)
@@ -13,6 +12,7 @@ public class SongbookDbContext : IdentityDbContext<User, IdentityRole<int>, int>
     {
     }
 
+    public DbSet<User> Users => Set<User>();
     public DbSet<Song> Songs => Set<Song>();
     public DbSet<Artist> Artists => Set<Artist>();
     public DbSet<Chord> Chords => Set<Chord>();
@@ -24,7 +24,6 @@ public class SongbookDbContext : IdentityDbContext<User, IdentityRole<int>, int>
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.Entity<User>().ToTable("Users");
         // ---- Song ↔ Artist (1:N)
         modelBuilder.Entity<Song>()
             .HasOne(s => s.Artist)
