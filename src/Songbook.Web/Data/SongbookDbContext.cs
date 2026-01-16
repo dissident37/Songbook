@@ -24,6 +24,12 @@ public class SongbookDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
+        modelBuilder.Entity<User>().ToTable("Users");
+
+        modelBuilder.Entity<User>()
+            .HasIndex(u => u.IdentityUserId)
+            .IsUnique();
+
         // ---- Song ↔ Artist (1:N)
         modelBuilder.Entity<Song>()
             .HasOne(s => s.Artist)
