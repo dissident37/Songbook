@@ -1,6 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Songbook.Web.Data;
 using Songbook.Web.Models;
+using Songbook.Web.Auth;
+using Microsoft.AspNetCore.Identity;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +28,8 @@ builder.Services
         options.Password.RequireNonAlphanumeric = false;
     })
     .AddEntityFrameworkStores<AuthDbContext>();
+builder.Services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, ProfileClaimsPrincipalFactory<ApplicationUser>>();
+
 
 var app = builder.Build();
 
