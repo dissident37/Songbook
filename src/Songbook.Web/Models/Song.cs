@@ -10,7 +10,8 @@ public class Song
 
     public string Content { get; set; } = "";        // текст с аккордами
     public string ContentPlain { get; set; } = "";   // текст без аккордов
-
+    // Wenn true: sichtbar für alle. Wenn false: nur für den Besitzer.
+    public bool IsPublic { get; set; } = false;
     public int? CreatedByUserId { get; set; }
     public User? CreatedByUser { get; set; }
     // связи M:N с аккордами
