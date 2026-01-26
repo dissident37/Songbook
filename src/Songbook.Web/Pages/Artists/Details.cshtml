@@ -5,7 +5,7 @@
 
 @if (Model.Artist.Songs.Any())
 {
-    <h5>Песни</h5>
+    <h5>Songs</h5>
     <ul class="list-unstyled ms-3">
         @foreach (var song in Model.Artist.Songs)
         {
@@ -21,30 +21,27 @@
 }
 else
 {
-    <p class="text-muted">У этого артиста пока нет песен.</p>
+    <p class="text-muted">Dieser Interpret hat noch keine Songs.</p>
 }
 
 <div class="mt-4 d-flex gap-2">
-    <a asp-page="/Songs/Create"
-       asp-route-artistId="@Model.Artist.Id"
-       class="btn btn-primary">
-        ➕ Добавить песню
-    </a>
+    @if (User.IsInRole("Admin"))
+    {
+        <a asp-page="Edit"
+           asp-route-id="@Model.Artist.Id"
+           class="btn btn-outline-secondary">
+            ✏ Interpret bearbeiten
+        </a>
 
-    <a asp-page="Edit"
-       asp-route-id="@Model.Artist.Id"
-       class="btn btn-outline-secondary">
-        ✏ Редактировать артиста
-    </a>
-
-    <a asp-page="Delete"
-       asp-route-id="@Model.Artist.Id"
-       class="btn btn-outline-danger">
-        🗑 Удалить артиста
-    </a>
+        <a asp-page="Delete"
+           asp-route-id="@Model.Artist.Id"
+           class="btn btn-outline-danger">
+            🗑 Interpret löschen
+        </a>
+    }
 
     <a asp-page="Index"
        class="btn btn-secondary ms-auto">
-        ← К списку артистов
+        ← Zurück zur Künstlerliste
     </a>
 </div>
