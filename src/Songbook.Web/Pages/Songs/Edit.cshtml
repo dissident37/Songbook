@@ -1,22 +1,45 @@
 @page "{id:int}"
 @model Songbook.Web.Pages.Songs.EditModel
 
-<h1>Edit Song</h1>
+<h1>Song bearbeiten</h1>
 
 <form method="post">
+    <!-- Validierungsfehler anzeigen -->
+    <div asp-validation-summary="All" class="text-danger"></div>
+
     <div class="mb-3">
-        <label>Title</label>
+        <label class="form-label">Titel</label>
         <input class="form-control" asp-for="Input.Title" />
+        <span asp-validation-for="Input.Title" class="text-danger"></span>
+    </div>
+
+    <!-- Artist: Anzeige-Input + Hidden-ID (entscheidend ist SelectedArtistId) -->
+    <div class="mb-3 position-relative">
+        <label class="form-label">Interpret</label>
+
+        <input type="text"
+               class="form-control"
+               id="artistInput"
+               name="Input.ArtistName"
+               value="@Model.Input.ArtistName"
+               autocomplete="off" />
+        <span asp-validation-for="Input.ArtistName" class="text-danger"></span>
+
+        <input type="hidden"
+               id="artistIdInput"
+               name="Input.SelectedArtistId"
+               value="@Model.Input.SelectedArtistId" />
+
+        <ul class="list-group position-absolute w-100"
+            id="artistSuggestions"
+            style="z-index:1000; display:none; max-height:240px; overflow:auto;">
+        </ul>
     </div>
 
     <div class="mb-3">
-        <label>Artist</label>
-        <input class="form-control" asp-for="Input.ArtistName" />
-    </div>
-
-    <div class="mb-3">
-        <label>Content (with chords)</label>
+        <label class="form-label">Text (mit Akkorden)</label>
         <textarea class="form-control" rows="10" asp-for="Input.Content"></textarea>
+        <span asp-validation-for="Input.Content" class="text-danger"></span>
     </div>
 
     <div class="form-check mb-3">
@@ -26,7 +49,82 @@
         </label>
     </div>
 
-
-    <button type="submit" class="btn btn-primary">Save</button>
-    <a asp-page="Index" class="btn btn-secondary">Cancel</a>
+    <button type="submit" class="btn btn-primary">Speichern</button>
+    <a asp-page="Index" class="btn btn-secondary">Abbrechen</a>
 </form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+
+            const input = document.getElementById("artistInput");
+            const list = document.getElementById("artistSuggestions");
+            const artistIdInput = document.getElementById("artistIdInput");
+
+            if (!input || !list || !artistIdInput) return;
+
+            let timer = null;
+
+            input.addEventListener("input", () => {
+                const term = input.value.trim();
+
+                // Wenn der Benutzer tippt, ist die alte Auswahl nicht mehr sicher
+                artistIdInput.value = "";
+
+                clearTimeout(timer);
+
+                if (term.length < 2) {
+                    list.style.display = "none";
+                    list.innerHTML = "";
+                    return;
+                }
+
+                timer = setTimeout(async () => {
+                    const response = await fetch(
+                        `?handler=SearchArtists&term=${encodeURIComponent(term)}`
+                    );
+
+                    if (!response.ok) {
+                        list.style.display = "none";
+                        return;
+                    }
+
+                    const artists = await response.json();
+                    list.innerHTML = "";
+
+                    if (!artists || artists.length === 0) {
+                        list.style.display = "none";
+                        return;
+                    }
+
+                    artists.forEach(a => {
+                        const item = document.createElement("li");
+                        item.className = "list-group-item list-group-item-action";
+                        item.textContent = a.name;
+
+                        item.addEventListener("click", () => {
+                            // Auswahl aus Vorschlägen: Name + ID setzen
+                            input.value = a.name;
+                            artistIdInput.value = a.id;
+
+                            list.style.display = "none";
+                            list.innerHTML = "";
+                        });
+
+                        list.appendChild(item);
+                    });
+
+                    list.style.display = "block";
+                }, 200);
+            });
+
+            document.addEventListener("click", (e) => {
+                if (!list.contains(e.target) && e.target !== input) {
+                    list.style.display = "none";
+                }
+            });
+        });
+    </script>
+}
