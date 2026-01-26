@@ -3,10 +3,13 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Songbook.Web.Data;
 using Songbook.Web.Models;
+using Songbook.Web.Auth;
+using Microsoft.AspNetCore.Authorization;
+
 
 namespace Songbook.Web.Pages.Songs;
 
-
+[Authorize]
 public class CreateModel : PageModel
 {
     private readonly SongbookDbContext _context;
@@ -28,6 +31,10 @@ public class CreateModel : PageModel
         public string ArtistName { get; set; } = "";
         public int? SelectedArtistId { get; set; }
         public string Content { get; set; } = "";
+
+        // Wenn true: Song ist für alle sichtbar
+        public bool IsPublic { get; set; } = false;
+
     }
 
     public async Task OnGetAsync(int? artistId, string? artistName)
@@ -82,8 +89,11 @@ public class CreateModel : PageModel
         {
             Title = Input.Title,
             Content = Input.Content,
-            ArtistId = artist.Id
+            ArtistId = artist.Id,
+            IsPublic = Input.IsPublic,
+            CreatedByUserId = User.GetProfileId()
         };
+
 
         _context.Songs.Add(song);
         await _context.SaveChangesAsync();

@@ -3,9 +3,12 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Songbook.Web.Data;
 using Songbook.Web.Models;
+using Microsoft.AspNetCore.Authorization;
+
 
 namespace Songbook.Web.Pages.Songs;
 
+[Authorize]
 public class EditModel : PageModel
 {
     private readonly SongbookDbContext _context;
@@ -25,6 +28,9 @@ public class EditModel : PageModel
         public string Title { get; set; } = "";
         public string ArtistName { get; set; } = "";
         public string Content { get; set; } = "";
+
+        // Wenn true: sichtbar für alle
+        public bool IsPublic { get; set; } = false;
     }
 
     public async Task<IActionResult> OnGetAsync(int id)
@@ -41,6 +47,7 @@ public class EditModel : PageModel
         Input.Title = song.Title;
         Input.ArtistName = song.Artist.Name;
         Input.Content = song.Content;
+        Input.IsPublic = song.IsPublic;
 
         return Page();
     }
@@ -65,6 +72,7 @@ public class EditModel : PageModel
         song.Title = Input.Title;
         song.ArtistId = artist.Id;
         song.Content = Input.Content;
+        song.IsPublic = Input.IsPublic;
         song.ContentPlain = System.Text.RegularExpressions.Regex.Replace(Input.Content, @"\[[^\]]+\]", "");
 
         await _context.SaveChangesAsync();
