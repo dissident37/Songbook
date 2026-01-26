@@ -1,13 +1,14 @@
 ﻿@page "{id:int}"
 @model Songbook.Web.Pages.Artists.DeleteModel
 
-<h1>Удалить артиста</h1>
+<h1>Interpret löschen</h1>
 
 <div class="alert alert-warning">
-    Вы уверены, что хотите удалить <strong>@Model.Artist.Name</strong>?
+    Sind Sie sicher, dass Sie den Interpreten
+    <strong>@Model.Artist.Name</strong> löschen möchten?
 </div>
 
 <form method="post">
-    <button type="submit" class="btn btn-danger">Удалить</button>
-    <a asp-page="Index" class="btn btn-secondary">Отмена</a>
+    <button type="submit" class="btn btn-danger">Löschen</button>
+    <a asp-page="Index" class="btn btn-secondary">Abbrechen</a>
 </form>

@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Songbook.Web.Pages.Artists;
 
-[Authorize]
+[Authorize(Policy = "AdminOnly")]
 
 public class DeleteModel : PageModel
 {

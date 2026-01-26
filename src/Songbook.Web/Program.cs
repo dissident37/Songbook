@@ -11,6 +11,12 @@ var builder = WebApplication.CreateBuilder(args);
 // Razor Pages
 builder.Services.AddRazorPages();
 
+// Autorisierung: Admin-Bereich (wird später mit Role-Seeding aktiviert)
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
+});
+
 // Datenbank für deine App-Daten (Songs, Artists, Playlists, Users-Profil)
 builder.Services.AddDbContext<SongbookDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));

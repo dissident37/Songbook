@@ -1,22 +1,29 @@
 ﻿@page "{id:int}"
 @model Songbook.Web.Pages.Artists.EditModel
 
-<h1>Редактирование артиста</h1>
+<h1>Interpret bearbeiten</h1>
 
 <form method="post" class="mt-3">
-    
+    <!-- Artist-ID beibehalten -->
     <input type="hidden" asp-for="Artist.Id" />
 
+    <!-- Validierungsfehler anzeigen -->
+    <div asp-validation-summary="All" class="text-danger"></div>
+
     <div class="mb-3">
-        <label asp-for="Artist.Name" class="form-label"></label>
+        <label asp-for="Artist.Name" class="form-label">Name</label>
         <input asp-for="Artist.Name" class="form-control" />
         <span asp-validation-for="Artist.Name" class="text-danger"></span>
     </div>
 
-    <button type="submit" class="btn btn-primary">Сохранить</button>
+    <button type="submit" class="btn btn-primary">Speichern</button>
     <a asp-page="Details"
        asp-route-id="@Model.Artist.Id"
        class="btn btn-secondary">
-        Отмена
+        Abbrechen
     </a>
 </form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
