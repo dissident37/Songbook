@@ -1,23 +1,24 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Songbook.Web.Auth;
 using Songbook.Web.Data;
 using Songbook.Web.Models;
-using Songbook.Web.Auth;
-using Microsoft.AspNetCore.Identity;
 
 
 var builder = WebApplication.CreateBuilder(args);
 
 // ===== Services (Dienste registrieren) =====
+
 // Razor Pages
 builder.Services.AddRazorPages();
 
-// Autorisierung: Admin-Bereich (wird später mit Role-Seeding aktiviert)
+// Autorisierung: Admin-Bereich (Rolle wird per Seed erzeugt)
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
 });
 
-// Datenbank für deine App-Daten (Songs, Artists, Playlists, Users-Profil)
+// Datenbank für App-Daten (Songs, Artists, Playlists, Domain-Userprofil)
 builder.Services.AddDbContext<SongbookDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -25,7 +26,7 @@ builder.Services.AddDbContext<SongbookDbContext>(options =>
 builder.Services.AddDbContext<AuthDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// ASP.NET Core Identity (Registrierung / Login)
+// ASP.NET Core Identity (Registrierung / Login) + Rollen aktivieren
 builder.Services
     .AddDefaultIdentity<ApplicationUser>(options =>
     {
@@ -33,13 +34,15 @@ builder.Services
         options.Password.RequiredLength = 6;
         options.Password.RequireNonAlphanumeric = false;
     })
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<AuthDbContext>();
-builder.Services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, ProfileClaimsPrincipalFactory<ApplicationUser>>();
 
+builder.Services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, ProfileClaimsPrincipalFactory<ApplicationUser>>();
 
 var app = builder.Build();
 
 // ===== Pipeline (Reihenfolge der Middleware) =====
+
 // Fehlerbehandlung
 if (!app.Environment.IsDevelopment())
 {
@@ -58,6 +61,9 @@ app.UseRouting();
 // Authentifizierung & Autorisierung (wichtig für [Authorize])
 app.UseAuthentication();
 app.UseAuthorization();
+
+// Identity-Rollen und Admin-User initialisieren (vor dem ersten Request)
+await IdentitySeed.SeedAsync(app.Services);
 
 // Razor Pages Endpunkte
 app.MapRazorPages();

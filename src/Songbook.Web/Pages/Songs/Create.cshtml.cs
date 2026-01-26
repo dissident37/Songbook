@@ -100,10 +100,15 @@ public class CreateModel : PageModel
             // Neuen Artist: zuerst Duplikat prüfen (case-insensitive Vergleich)
             var normalized = name.ToUpperInvariant();
 
-            artist = await _context.Artists
+            // FirstOrDefaultAsync liefert Artist? (nullable) → deswegen extra Variable
+            Artist? existingArtist = await _context.Artists
                 .FirstOrDefaultAsync(a => a.Name.ToUpper() == normalized);
 
-            if (artist == null)
+            if (existingArtist != null)
+            {
+                artist = existingArtist;
+            }
+            else
             {
                 // Kein Duplikat gefunden → neuen Artist anlegen
                 artist = new Artist { Name = name };
@@ -111,6 +116,7 @@ public class CreateModel : PageModel
                 await _context.SaveChangesAsync();
             }
         }
+
 
         // Song erstellen und Ownership setzen
         var song = new Song

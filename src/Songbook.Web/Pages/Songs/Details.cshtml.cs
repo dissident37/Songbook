@@ -16,30 +16,26 @@ public class DetailsModel : PageModel
         _context = context;
     }
 
-    public Song Song { get; set; } = null!;
+    public Song? Song { get; set; }
 
     public async Task<IActionResult> OnGetAsync(int id)
     {
+        // Sichtbarkeit:
+        // - Gast: nur öffentliche Songs
+        // - Eingeloggt: öffentliche + eigene private Songs
+        var isAuthenticated = User.Identity?.IsAuthenticated == true;
+        var myProfileId = isAuthenticated ? User.GetProfileId() : (int?)null;
+
         Song = await _context.Songs
             .Include(s => s.Artist)
-            .FirstOrDefaultAsync(s => s.Id == id);
+            .Where(s => s.Id == id)
+            .Where(s => s.IsPublic || (isAuthenticated && s.CreatedByUserId == myProfileId))
+            .FirstOrDefaultAsync();
 
         if (Song == null)
             return NotFound();
 
-        // Sichtbarkeit prüfen:
-        // - Gast: nur public
-        // - Eingeloggt: public + eigene private
-        if (!Song.IsPublic)
-        {
-            if (User.Identity?.IsAuthenticated != true)
-                return NotFound();
-
-            var myProfileId = User.GetProfileId();
-            if (Song.CreatedByUserId != myProfileId)
-                return NotFound();
-        }
-
         return Page();
     }
+
 }
