@@ -1,14 +1,14 @@
 ﻿@page
 @model Songbook.Web.Pages.Artists.IndexModel
 
-<h1 class="mb-4">Артисты</h1>
+<h1 class="mb-4">Interpreten</h1>
 <p class="text-muted">
-    Выберите артиста для просмотра песен
+    Wählen Sie einen Interpreten aus, um die Songs anzuzeigen.
 </p>
 
 @if (!Model.Artists.Any())
 {
-    <p>Артисты не найдены.</p>
+    <p>Keine Interpreten gefunden.</p>
 }
 else
 {
@@ -23,7 +23,7 @@ else
                 </a>
 
                 <span class="text-muted">
-                    @artist.Songs.Count песен
+                    @artist.Songs.Count Songs
                 </span>
             </li>
         }
@@ -32,6 +32,9 @@ else
 
 <hr />
 
-<a asp-page="Create" class="btn btn-sm btn-outline-secondary">
-    ➕ Добавить артиста
-</a>
+@if (User.IsInRole("Admin"))
+{
+    <a asp-page="Create" class="btn btn-sm btn-outline-secondary">
+        ➕ Interpreten hinzufügen
+    </a>
+}

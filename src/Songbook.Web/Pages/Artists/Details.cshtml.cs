@@ -1,10 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using Songbook.Web.Auth;
 using Songbook.Web.Data;
 using Songbook.Web.Models;
-using Songbook.Web.Auth;
-
 
 namespace Songbook.Web.Pages.Artists;
 
@@ -21,34 +20,29 @@ public class DetailsModel : PageModel
 
     public async Task<IActionResult> OnGetAsync(int id)
     {
-        // 1) Artist ohne Songs laden
-        Artist = await _context.Artists
+        // Artist ohne Songs laden (Songs werden mit Sichtbarkeits-Regeln separat geladen)
+        var artist = await _context.Artists
             .FirstOrDefaultAsync(a => a.Id == id);
 
-        if (Artist == null)
+        if (artist == null)
             return NotFound();
 
-        // 2) Songs separat laden, aber mit Sichtbarkeits-Regeln
-        var songsQuery = _context.Songs
+        var isAuthenticated = User.Identity?.IsAuthenticated == true;
+        var myProfileId = isAuthenticated ? User.GetProfileId() : (int?)null;
+
+        // Sichtbarkeit:
+        // - Gast: nur öffentliche Songs
+        // - Eingeloggt: öffentliche + eigene private Songs
+        var songs = await _context.Songs
             .Where(s => s.ArtistId == id)
-            .AsQueryable();
+            .Where(s => s.IsPublic || (isAuthenticated && s.CreatedByUserId == myProfileId))
+            .OrderBy(s => s.Title)
+            .ToListAsync();
 
-        // Gast: nur public
-        if (User.Identity?.IsAuthenticated != true)
-        {
-            songsQuery = songsQuery.Where(s => s.IsPublic);
-        }
-        else
-        {
-            // Eingeloggt: public + eigene private
-            var myProfileId = User.GetProfileId();
-            songsQuery = songsQuery.Where(s => s.IsPublic || s.CreatedByUserId == myProfileId);
-        }
+        // In Navigation-Property setzen, damit die Razor-View wie gewohnt funktioniert
+        artist.Songs = songs;
 
-        // 3) In die Navigation-Property legen (damit Razor weiter wie раньше funktioniert)
-        Artist.Songs = await songsQuery.ToListAsync();
-
+        Artist = artist;
         return Page();
     }
-
 }
