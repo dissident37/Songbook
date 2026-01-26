@@ -93,49 +93,38 @@ Die folgenden Tabellen werden erstellt:
 - DBeaver
 - .NET 8 SDK
 
-## Authentication & Benutzerprofile
+## Authentication, Authorization & Benutzerprofile
 
-Das Projekt verwendet **ASP.NET Core Identity** für Authentifizierung
-(Registrierung, Login, Logout) und eine **separate Users-Tabelle**
-für die fachliche Anwendungslogik.
-
-### Trennung von Account und Profil
-
-Es existieren bewusst zwei unterschiedliche Konzepte:
+Das Projekt nutzt **ASP.NET Core Identity** für Authentifizierung (Registrierung/Login/Logout)
+und eine **separate Domain-Tabelle `Users`** für fachliche Anwendungslogik.
 
 ### 1) Authentifizierungs-Account (ASP.NET Core Identity)
-- Tabellen: `AspNetUsers`, `AspNetRoles`, etc.
+- Tabellen: `AspNetUsers`, `AspNetUserClaims`, (optional später `AspNetRoles`, etc.)
 - Verantwortlich für:
   - Login / Logout
   - Passwort-Hash
   - Cookies & Security
-  - Passwort-Reset, E-Mail-Bestätigung (optional)
 
-Diese Tabellen werden automatisch von ASP.NET Core Identity verwaltet.
-
-### 2) Benutzerprofil (eigene Tabelle `Users`)
+### 2) Domain-Benutzerprofil (eigene Tabelle `Users`)
 - Verantwortlich für:
-  - Besitzer von Songs
-  - Besitzer von Playlists
-  - Anwendungslogik und Beziehungen im Domain-Modell
+  - Besitzer von Songs/Playlists (Domain-Ownership)
+  - Anzeige-/Profil-Daten (z. B. `DisplayName`)
+- Wichtig: **Nicht** für Authentifizierung zuständig.
 
-Diese Tabelle ist **nicht** für Authentifizierung zuständig.
+### Verknüpfung Account ↔ Profil
+- `AspNetUsers.Id` (string) wird in `Users.IdentityUserId` gespeichert.
+- Beim **ersten Login** wird automatisch ein Profil in `Users` erstellt (falls nicht vorhanden).
+- Die interne Profil-ID (`Users.Id`) wird als Claim `ProfileId` gesetzt.
+- In `Users` existiert ein **Unique Index** auf `IdentityUserId` (Schutz vor doppelten Profilen).
 
-### Verknüpfung zwischen Account und Profil
-
-- `AspNetUsers.Id` (string)
-  → gespeichert in `Users.IdentityUserId`
-- Beim ersten Login oder bei der Registrierung:
-  - wird automatisch ein Eintrag in der Tabelle `Users` erstellt (falls nicht vorhanden)
-  - die interne Profil-ID (`Users.Id`) wird als Claim (`ProfileId`) gesetzt
-
-Dadurch kann die Anwendung:
-- sicher authentifizieren (Identity)
-- gleichzeitig sauber mit eigenen Benutzerprofilen arbeiten
+### Authorization (Zugriffsschutz)
+- Create/Edit/Delete-Seiten sind nur für eingeloggte Benutzer zugänglich (`[Authorize]`).
+- Songs unterstützen Sichtbarkeit:
+  - `IsPublic = true`: sichtbar für alle
+  - `IsPublic = false`: sichtbar nur für den Besitzer (`CreatedByUserId`)
+- Listen/Details filtern entsprechend (öffentlich + eigene private Songs).
 
 ### Vorteile dieser Architektur
-
-- klare Trennung von Security und Business-Logik
-- saubere und erweiterbare Architektur
-- realistische Production-Struktur
-- einfache Erweiterung (z. B. OAuth, Google Login)
+- klare Trennung von Security (Identity) und Business-Logik (Domain-Profil)
+- saubere Ownership-Logik (Songs/Playlists gehören dem Domain-Profil)
+- gut erweiterbar (z. B. Rollen/Admin, OAuth)
