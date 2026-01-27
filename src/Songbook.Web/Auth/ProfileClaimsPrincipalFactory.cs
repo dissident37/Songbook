@@ -12,16 +12,17 @@ namespace Songbook.Web.Auth;
 /// Hier erzeugen wir automatisch ein Domain-Profil in der Tabelle "Users",
 /// falls es noch nicht existiert, und speichern ProfileId als Claim.
 /// </summary>
-public class ProfileClaimsPrincipalFactory<TIdentityUser> : UserClaimsPrincipalFactory<TIdentityUser>
+public class ProfileClaimsPrincipalFactory<TIdentityUser> : UserClaimsPrincipalFactory<TIdentityUser, IdentityRole>
     where TIdentityUser : IdentityUser
 {
     private readonly SongbookDbContext _db;
 
     public ProfileClaimsPrincipalFactory(
-        UserManager<TIdentityUser> userManager,
-        IOptions<IdentityOptions> optionsAccessor,
-        SongbookDbContext db)
-        : base(userManager, optionsAccessor)
+    UserManager<TIdentityUser> userManager,
+    RoleManager<IdentityRole> roleManager,
+    IOptions<IdentityOptions> optionsAccessor,
+    SongbookDbContext db)
+    : base(userManager, roleManager, optionsAccessor)
     {
         _db = db;
     }
