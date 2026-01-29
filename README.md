@@ -15,7 +15,7 @@ Ziel des Projekts ist es, Webentwicklungskompetenzen zu demonstrieren und ein n�
 - [x] ASP.NET Core Identity (Login/Logout) + Domain-Profil `Users`
 - [x] Authorization Policies + Rollen (Admin)
 - [x] Deployment auf VPS (Docker)
-- [ ] Moderator-Rechte + Soft Delete (Takedown-Case)
+- [ ] Admin-Moderation: Songs ausblenden
 - [ ] Playlists
 - [ ] Suche/Filter
 
@@ -124,11 +124,17 @@ und eine **separate Domain-Tabelle `Users`** für fachliche Anwendungslogik.
 - In `Users` existiert ein **Unique Index** auf `IdentityUserId` (Schutz vor doppelten Profilen).
 
 ### Authorization (Zugriffsschutz)
-- Create/Edit/Delete-Seiten sind nur für eingeloggte Benutzer zugänglich (`[Authorize]`).
-- Songs unterstützen Sichtbarkeit:
+
+#### Songs
+- Create/Edit/Delete: nur für eingeloggte Benutzer (Ownership).
+- Sichtbarkeit:
   - `IsPublic = true`: sichtbar für alle
-  - `IsPublic = false`: sichtbar nur für den Besitzer (`CreatedByUserId`)
-- Listen/Details filtern entsprechend (öffentlich + eigene private Songs).
+  - `IsPublic = false`: privat (nur für den Besitzer)
+- Listen und Detailseiten filtern entsprechend.
+
+Der Admin kann Songs **nicht löschen**, sondern nur **ausblenden**
+(z. B. bei Spam, Beleidigungen oder Regelverstößen).
+Ownership bleibt dabei unverändert.
 
 ### Authorization: Artists (Referenzdaten)
 - `Index`/`Details`: öffentlich
@@ -154,9 +160,13 @@ Das verhindert unnötige Privilegien (Least Privilege) und hält Ownership konsi
 - Seeding wird beim Application-Startup ausgeführt (lokale Entwicklung & Deployment).
 
 
-### Offener Architektur-Case: Takedown (juristische Löschung)
-Aktuell kann ein Admin fremde Songs nicht löschen (Ownership-Modell).
-Dieser Case zeigt den Konflikt zwischen Ownership, Security und rechtlichen Anforderungen.
-Nächster Schritt: **Moderator/ContentAdmin** + bevorzugt **Soft Delete** (Audit), ohne Ownership zu brechen.
+### Admin als Moderator (bewusst vereinfacht)
+Die Admin-Rolle übernimmt zusätzlich Moderationsaufgaben.
 
+Admin kann:
+- Artists erstellen, bearbeiten und löschen
+- problematische Inhalte bereinigen
+- Songs ausblenden (nicht löschen)
+
+Diese Lösung ist bewusst einfach gehalten und ausreichend für den aktuellen Projektumfang.
 
