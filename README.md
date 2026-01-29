@@ -9,11 +9,15 @@ Ziel des Projekts ist es, Webentwicklungskompetenzen zu demonstrieren und ein n�
 2. Lokalen Server starten (folgt später).
 
 ## Roadmap
-- [ ] Tag 1 – Projektstruktur, README, Kanban-Board
-- [ ] Tag 2 – einfache Webseite erstellen
-- [ ] Tag 3 – Datenbank anbinden
-- [ ] Tag 4 – CRUD (Lieder hinzufügen und bearbeiten)
-- [ ] Tag 5 – Deployment auf einem Server (VPS bei IONOS)
+- [x] Projektstruktur (src/docs/deploy), README, Grundsetup
+- [x] PostgreSQL + EF Core (Migrationen)
+- [x] CRUD Songs + Visibility (public/private) + Ownership
+- [x] ASP.NET Core Identity (Login/Logout) + Domain-Profil `Users`
+- [x] Authorization Policies + Rollen (Admin)
+- [x] Deployment auf VPS (Docker)
+- [ ] Moderator-Rechte + Soft Delete (Takedown-Case)
+- [ ] Playlists
+- [ ] Suche/Filter
 
 ## Projektstruktur
 /src         → Quellcode der ASP.NET Core Anwendung
@@ -80,9 +84,11 @@ dotnet ef migrations add InitialCreate
 dotnet ef database update
 ```
 
-Die folgenden Tabellen werden erstellt:
+Die folgenden Tabellen werden erstellt (Auszug):
 
 - Songs
+- Users
+- AspNetUsers, AspNetRoles, AspNetUserRoles, ...
 - __EFMigrationsHistory
 
 ## Verwendete Technologien
@@ -99,7 +105,7 @@ Das Projekt nutzt **ASP.NET Core Identity** für Authentifizierung (Registrierun
 und eine **separate Domain-Tabelle `Users`** für fachliche Anwendungslogik.
 
 ### 1) Authentifizierungs-Account (ASP.NET Core Identity)
-- Tabellen: `AspNetUsers`, `AspNetUserClaims`, (optional später `AspNetRoles`, etc.)
+- Tabellen: AspNetUsers, AspNetRoles, AspNetUserRoles, AspNetUserClaims, ...
 - Verantwortlich für:
   - Login / Logout
   - Passwort-Hash
@@ -124,7 +130,33 @@ und eine **separate Domain-Tabelle `Users`** für fachliche Anwendungslogik.
   - `IsPublic = false`: sichtbar nur für den Besitzer (`CreatedByUserId`)
 - Listen/Details filtern entsprechend (öffentlich + eigene private Songs).
 
+### Authorization: Artists (Referenzdaten)
+- `Index`/`Details`: öffentlich
+- `Create`/`Edit`/`Delete`: nur **Admin** (Policy `AdminOnly`)
+- UI blendet Admin-Buttons für Nicht-Admins aus, Backend bleibt trotzdem geschützt.
+
+### Prinzip: Ownership > Rolle
+Admin hat **keine automatischen Rechte** auf fremde Songs.
+Das verhindert unnötige Privilegien (Least Privilege) und hält Ownership konsistent.
+
 ### Vorteile dieser Architektur
 - klare Trennung von Security (Identity) und Business-Logik (Domain-Profil)
 - saubere Ownership-Logik (Songs/Playlists gehören dem Domain-Profil)
 - gut erweiterbar (z. B. Rollen/Admin, OAuth)
+
+### Rollen (Admin) & Seeding
+- Es existiert die Rolle **Admin**.
+- Seed ist **idempotent** (mehrfach ausführbar, ohne Duplikate):
+  - Rolle **Admin**
+  - Benutzer `admin@songbook.local`
+- Rollen werden korrekt in Claims geladen.
+  `User.IsInRole("Admin")` funktioniert dank `ProfileClaimsPrincipalFactory` (Fix eines echten Bugs).
+- Seeding wird beim Application-Startup ausgeführt (lokale Entwicklung & Deployment).
+
+
+### Offener Architektur-Case: Takedown (juristische Löschung)
+Aktuell kann ein Admin fremde Songs nicht löschen (Ownership-Modell).
+Dieser Case zeigt den Konflikt zwischen Ownership, Security und rechtlichen Anforderungen.
+Nächster Schritt: **Moderator/ContentAdmin** + bevorzugt **Soft Delete** (Audit), ohne Ownership zu brechen.
+
+
