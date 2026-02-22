@@ -1,13 +1,14 @@
 @page
 @model Songbook.Web.Pages.Songs.CreateModel
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer T
 
-<h1>Добавить песню</h1>
+<h1>@T["Title"]</h1>
 
 <form method="post">
 
-    <!-- ИСПОЛНИТЕЛЬ (ВСЕГДА В DOM) -->
+    <!-- РРЎРџРћР›РќРРўР•Р›Р¬ (Р’РЎР•Р“Р”Рђ Р’ DOM) -->
     <div class="mb-3 position-relative">
-        <label class="form-label">Исполнитель</label>
+        <label class="form-label">@T["ArtistLabel"]</label>
 
         <input type="text" class="form-control" id="artistInput" name="Input.ArtistName" value="@Model.Input.ArtistName"
             autocomplete="off" />
@@ -19,28 +20,28 @@
         </ul>
     </div>
 
-    <!-- НАЗВАНИЕ ПЕСНИ -->
+    <!-- РќРђР—Р’РђРќРР• РџР•РЎРќР -->
     <div class="mb-3">
-        <label class="form-label">Название песни</label>
+        <label class="form-label">@T["SongTitleLabel"]</label>
         <input class="form-control" asp-for="Input.Title" />
     </div>
 
-    <!-- ТЕКСТ -->
+    <!-- РўР•РљРЎРў -->
     <div class="mb-3">
-        <label class="form-label">Текст (с аккордами)</label>
+        <label class="form-label">@T["ContentLabel"]</label>
         <textarea class="form-control" rows="10" asp-for="Input.Content"></textarea>
     </div>
 
     <div class="form-check mb-3">
         <input class="form-check-input" asp-for="Input.IsPublic" />
         <label class="form-check-label" asp-for="Input.IsPublic">
-            Öffentlich (für alle sichtbar)
+            @T["IsPublicLabel"]
         </label>
     </div>
 
 
-    <button type="submit" class="btn btn-primary">Сохранить</button>
-    <a asp-page="/Songs/Index" class="btn btn-secondary">Отмена</a>
+    <button type="submit" class="btn btn-primary">@T["Save"]</button>
+    <a asp-page="/Songs/Index" class="btn btn-secondary">@T["Cancel"]</a>
 </form>
 
 <script>
