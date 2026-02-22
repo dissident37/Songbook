@@ -1,14 +1,16 @@
-﻿@page "{id:int}"
+@page "{id:int}"
 @model Songbook.Web.Pages.Artists.DeleteModel
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer T
 
-<h1>Interpret löschen</h1>
+<h1>@T["Title"]</h1>
 
 <div class="alert alert-warning">
-    Sind Sie sicher, dass Sie den Interpreten
-    <strong>@Model.Artist.Name</strong> löschen möchten?
+    @T["DeleteConfirmPrefix"]
+    <strong>@Model.Artist.Name</strong>
+    @T["DeleteConfirmSuffix"]
 </div>
 
 <form method="post">
-    <button type="submit" class="btn btn-danger">Löschen</button>
-    <a asp-page="Index" class="btn btn-secondary">Abbrechen</a>
+    <button type="submit" class="btn btn-danger">@T["Delete"]</button>
+    <a asp-page="Index" class="btn btn-secondary">@T["Cancel"]</a>
 </form>

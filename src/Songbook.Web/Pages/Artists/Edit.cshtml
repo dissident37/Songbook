@@ -1,7 +1,8 @@
-﻿@page "{id:int}"
+@page "{id:int}"
 @model Songbook.Web.Pages.Artists.EditModel
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer T
 
-<h1>Interpret bearbeiten</h1>
+<h1>@T["Title"]</h1>
 
 <form method="post" class="mt-3">
     <!-- Artist-ID beibehalten -->
@@ -11,16 +12,16 @@
     <div asp-validation-summary="All" class="text-danger"></div>
 
     <div class="mb-3">
-        <label asp-for="Artist.Name" class="form-label">Name</label>
+        <label asp-for="Artist.Name" class="form-label">@T["Name"]</label>
         <input asp-for="Artist.Name" class="form-control" />
         <span asp-validation-for="Artist.Name" class="text-danger"></span>
     </div>
 
-    <button type="submit" class="btn btn-primary">Speichern</button>
+    <button type="submit" class="btn btn-primary">@T["Save"]</button>
     <a asp-page="Details"
        asp-route-id="@Model.Artist.Id"
        class="btn btn-secondary">
-        Abbrechen
+        @T["Cancel"]
     </a>
 </form>
 
