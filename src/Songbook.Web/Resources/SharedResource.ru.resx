@@ -27,6 +27,12 @@
   <data name="Login" xml:space="preserve">
     <value>Вход</value>
   </data>
+  <data name="Account" xml:space="preserve">
+    <value>Аккаунт</value>
+  </data>
+  <data name="Logout" xml:space="preserve">
+    <value>Выход</value>
+  </data>
   <data name="SearchPlaceholder" xml:space="preserve">
     <value>Поиск...</value>
   </data>

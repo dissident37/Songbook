@@ -2,26 +2,27 @@
 @using Songbook.Web.Models
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
+@inject Microsoft.Extensions.Localization.IStringLocalizer<Songbook.Web.SharedResource> L
 
 <ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))
 {
     <li class="nav-item">
-        <a class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index">Account</a>
+        <a class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index">@L["Account"]</a>
     </li>
     <li class="nav-item">
         <form class="d-inline" asp-area="Identity" asp-page="/Account/Logout" method="post">
-            <button type="submit" class="nav-link btn btn-link p-0">Logout</button>
+            <button type="submit" class="nav-link btn btn-link p-0">@L["Logout"]</button>
         </form>
     </li>
 }
 else
 {
     <li class="nav-item">
-        <a class="nav-link" asp-area="Identity" asp-page="/Account/Register">Register</a>
+        <a class="nav-link" asp-area="Identity" asp-page="/Account/Register">@L["Register"]</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" asp-area="Identity" asp-page="/Account/Login">Login</a>
+        <a class="nav-link" asp-area="Identity" asp-page="/Account/Login">@L["Login"]</a>
     </li>
 }
 </ul>
