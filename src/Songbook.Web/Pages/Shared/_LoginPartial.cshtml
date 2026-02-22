@@ -7,11 +7,17 @@
 <ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))
 {
+    var userName = User.Identity?.Name ?? L["Account"].Value;
+    var avatarLetter = string.IsNullOrWhiteSpace(userName) ? "?" : userName.Trim()[0].ToString().ToUpperInvariant();
     <li class="nav-item">
-        <a class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index">@L["Account"]</a>
+        <a class="nav-link d-flex align-items-center gap-2" asp-area="Identity" asp-page="/Account/Manage/Index">
+            <span class="rounded-circle bg-secondary-subtle text-secondary d-inline-flex align-items-center justify-content-center fw-semibold"
+                  style="width:32px;height:32px;">@avatarLetter</span>
+            <span>@userName</span>
+        </a>
     </li>
     <li class="nav-item">
-        <form class="d-inline" asp-area="Identity" asp-page="/Account/Logout" method="post">
+        <form class="d-inline-flex align-items-center h-100" asp-area="Identity" asp-page="/Account/Logout" method="post">
             <button type="submit" class="nav-link btn btn-link p-0">@L["Logout"]</button>
         </form>
     </li>
