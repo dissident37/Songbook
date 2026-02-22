@@ -1,13 +1,14 @@
 @page
 @model Songbook.Web.Pages.Songs.SongIndexModel
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer T
 
-<h1 class="mb-3">Песни</h1>
+<h1 class="mb-3">@T["Title"]</h1>
 
 <table class="table table-hover">
     <thead>
         <tr>
-            <th>Песня</th>
-            <th>Исполнитель</th>
+            <th>@T["SongColumn"]</th>
+            <th>@T["ArtistColumn"]</th>
         </tr>
     </thead>
     <tbody>
@@ -33,4 +34,4 @@
     </tbody>
 </table>
 
-<a asp-page="Create" class="btn btn-primary">➕ Добавить песню</a>
+<a asp-page="Create" class="btn btn-primary">@T["AddSongButton"]</a>

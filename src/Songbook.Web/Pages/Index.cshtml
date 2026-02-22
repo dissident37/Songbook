@@ -1,15 +1,15 @@
-﻿@page
+@page
 @model Songbook.Web.Pages.IndexModel
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer T
 
 <div class="py-4">
-    <h1 class="mb-3">Songbook</h1>
+    <h1 class="mb-3">@T["Title"]</h1>
 
     <p class="lead">
-        Songbook — сайт для хранения текстов песен с аккордами.
-        Здесь можно собирать свою коллекцию, быстро находить и редактировать песни.
+        @T["LeadText"]
     </p>
 
     <a class="btn btn-primary" asp-page="/Artists/Index">
-        Перейти к артистам
+        @T["GoToArtists"]
     </a>
 </div>

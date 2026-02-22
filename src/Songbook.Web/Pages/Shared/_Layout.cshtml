@@ -70,11 +70,18 @@
                 </ul>
                 <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search"> <input type="search"
                         class="form-control" placeholder="@L["SearchPlaceholder"]" aria-label="@L["SearchPlaceholder"]"> </form>
-                <div class="d-flex align-items-center gap-2 me-3">
-                    <a class="link-secondary text-decoration-none" href="?culture=de">DE</a>
-                    <a class="link-secondary text-decoration-none" href="?culture=en">EN</a>
-                    <a class="link-secondary text-decoration-none" href="?culture=ru">RU</a>
-                </div>
+                <form method="get" asp-page="/SetCulture" class="d-flex align-items-center me-3">
+                    @{
+                        var currentUiCulture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+                    }
+                    <input type="hidden" name="returnUrl" value="@($"{Context.Request.Path}{Context.Request.QueryString}")" />
+                    <select name="culture" class="form-select form-select-sm" onchange="this.form.submit()"
+                            aria-label="Language selector">
+                        <option value="de" selected="@(currentUiCulture == "de" ? "selected" : null)">DE</option>
+                        <option value="en" selected="@(currentUiCulture == "en" ? "selected" : null)">EN</option>
+                        <option value="ru" selected="@(currentUiCulture == "ru" ? "selected" : null)">RU</option>
+                    </select>
+                </form>
                 <div class="ms-3">
                     <partial name="_LoginPartial" />
                 </div>
