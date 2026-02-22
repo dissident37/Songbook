@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+@using Microsoft.Extensions.Localization
+@using Songbook.Web
+@inject IStringLocalizer<SharedResource> L
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -49,24 +52,29 @@
                 <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
                     <li class="nav-item">
                         <a asp-page="/Index" class="nav-link px-2 link-secondary">
-                            Songbook
+                            @L["Songbook"]
                         </a>
                     </li>
 
                     <li class="nav-item">
                         <a asp-page="/Artists/Index" class="nav-link px-2 link-body-emphasis">
-                            Artists
+                            @L["Artists"]
                         </a>
                     </li>
 
                     <li class="nav-item">
                         <a asp-page="/Songs/Index" class="nav-link px-2 link-body-emphasis">
-                            Songs
+                            @L["Songs"]
                         </a>
                     </li>
                 </ul>
                 <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search"> <input type="search"
-                        class="form-control" placeholder="Search..." aria-label="Search"> </form>
+                        class="form-control" placeholder="@L["SearchPlaceholder"]" aria-label="@L["SearchPlaceholder"]"> </form>
+                <div class="d-flex align-items-center gap-2 me-3">
+                    <a class="link-secondary text-decoration-none" href="?culture=de">DE</a>
+                    <a class="link-secondary text-decoration-none" href="?culture=en">EN</a>
+                    <a class="link-secondary text-decoration-none" href="?culture=ru">RU</a>
+                </div>
                 <div class="ms-3">
                     <partial name="_LoginPartial" />
                 </div>

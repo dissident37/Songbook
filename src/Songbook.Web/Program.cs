@@ -1,5 +1,8 @@
+using System.Globalization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Songbook.Web.Auth;
 using Songbook.Web.Data;
 using Songbook.Web.Models;
@@ -9,8 +12,33 @@ var builder = WebApplication.CreateBuilder(args);
 
 // ===== Services (Dienste registrieren) =====
 
-// Razor Pages
-builder.Services.AddRazorPages();
+// Localization (nur UI-Texte)
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+
+builder.Services
+    .AddRazorPages()
+    .AddViewLocalization()
+    .AddDataAnnotationsLocalization();
+
+var supportedCultures = new[]
+{
+    new CultureInfo("de"),
+    new CultureInfo("en"),
+    new CultureInfo("ru")
+};
+
+builder.Services.Configure<RequestLocalizationOptions>(options =>
+{
+    options.DefaultRequestCulture = new RequestCulture("de");
+    options.SupportedCultures = supportedCultures;
+    options.SupportedUICultures = supportedCultures;
+
+    options.RequestCultureProviders.Insert(0, new QueryStringRequestCultureProvider
+    {
+        QueryStringKey = "culture",
+        UIQueryStringKey = "culture"
+    });
+});
 
 // Autorisierung: Admin-Bereich (Rolle wird per Seed erzeugt)
 builder.Services.AddAuthorization(options =>
@@ -51,6 +79,8 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseRequestLocalization(app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>().Value);
 
 // Statische Dateien (CSS/JS)
 app.UseStaticFiles();
