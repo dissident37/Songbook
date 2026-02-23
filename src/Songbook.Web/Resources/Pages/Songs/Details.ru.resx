@@ -9,4 +9,7 @@
   <data name="Delete" xml:space="preserve"><value>Удалить</value></data>
   <data name="BackToList" xml:space="preserve"><value>Назад к списку</value></data>
   <data name="OwnerLabel" xml:space="preserve"><value>Владелец</value></data>
+  <data name="ModerationStatusLabel" xml:space="preserve"><value>Модерация</value></data>
+  <data name="HiddenBadge" xml:space="preserve"><value>Скрыта</value></data>
+  <data name="HiddenReasonLabel" xml:space="preserve"><value>Причина</value></data>
 </root>

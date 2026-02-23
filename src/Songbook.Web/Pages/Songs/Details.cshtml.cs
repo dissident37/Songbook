@@ -34,7 +34,9 @@ public class DetailsModel : PageModel
 
         if (!IsAdmin)
         {
-            query = query.Where(s => s.IsPublic || (isAuthenticated && s.CreatedByUserId == myProfileId));
+            query = query.Where(s =>
+                !s.IsHiddenByAdmin &&
+                (s.IsPublic || (isAuthenticated && s.CreatedByUserId == myProfileId)));
         }
 
         Song = await query.FirstOrDefaultAsync();

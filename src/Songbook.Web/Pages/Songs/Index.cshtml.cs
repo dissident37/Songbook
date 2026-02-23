@@ -29,12 +29,12 @@ public class SongIndexModel : PageModel
         {
             if (User.Identity?.IsAuthenticated != true)
             {
-                query = query.Where(s => s.IsPublic);
+                query = query.Where(s => s.IsPublic && !s.IsHiddenByAdmin);
             }
             else
             {
                 var myProfileId = User.GetProfileId();
-                query = query.Where(s => s.IsPublic || s.CreatedByUserId == myProfileId);
+                query = query.Where(s => !s.IsHiddenByAdmin && (s.IsPublic || s.CreatedByUserId == myProfileId));
             }
         }
 

@@ -24,6 +24,9 @@
   <data name="OwnerColumn" xml:space="preserve">
     <value>Owner</value>
   </data>
+  <data name="HiddenBadge" xml:space="preserve">
+    <value>Hidden</value>
+  </data>
   <data name="AddSongButton" xml:space="preserve">
     <value>+ Add song</value>
   </data>

@@ -19,6 +19,23 @@
         @T["OwnerLabel"]:
         <span class="fw-semibold">@(Model.Song.CreatedByUser?.DisplayName ?? Model.Song.CreatedByUserId?.ToString() ?? "-")</span>
     </p>
+
+    @if (Model.Song.IsHiddenByAdmin)
+    {
+        <div class="alert alert-warning py-2">
+            <div>
+                <strong>@T["ModerationStatusLabel"]:</strong>
+                @T["HiddenBadge"]
+            </div>
+            @if (!string.IsNullOrWhiteSpace(Model.Song.HiddenReason))
+            {
+                <div>
+                    <strong>@T["HiddenReasonLabel"]:</strong>
+                    @Model.Song.HiddenReason
+                </div>
+            }
+        </div>
+    }
 }
 
 <pre class="song-text">

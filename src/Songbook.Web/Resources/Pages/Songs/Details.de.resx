@@ -6,6 +6,9 @@
   <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
   <data name="ArtistLabel" xml:space="preserve"><value>Interpret</value></data>
   <data name="OwnerLabel" xml:space="preserve"><value>Besitzer</value></data>
+  <data name="ModerationStatusLabel" xml:space="preserve"><value>Moderation</value></data>
+  <data name="HiddenBadge" xml:space="preserve"><value>Ausgeblendet</value></data>
+  <data name="HiddenReasonLabel" xml:space="preserve"><value>Grund</value></data>
   <data name="Edit" xml:space="preserve"><value>Bearbeiten</value></data>
   <data name="Delete" xml:space="preserve"><value>Loeschen</value></data>
   <data name="BackToList" xml:space="preserve"><value>Zurueck zur Liste</value></data>

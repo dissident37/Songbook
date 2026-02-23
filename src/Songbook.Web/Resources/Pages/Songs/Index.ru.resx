@@ -27,4 +27,7 @@
   <data name="OwnerColumn" xml:space="preserve">
     <value>Владелец</value>
   </data>
+  <data name="HiddenBadge" xml:space="preserve">
+    <value>Скрыта</value>
+  </data>
 </root>
