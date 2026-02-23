@@ -17,6 +17,7 @@ public class DetailsModel : PageModel
     }
 
     public Artist Artist { get; set; } = null!;
+    public bool IsAdmin => User.IsInRole("Admin");
 
     public async Task<IActionResult> OnGetAsync(int id)
     {
@@ -30,12 +31,22 @@ public class DetailsModel : PageModel
         var isAuthenticated = User.Identity?.IsAuthenticated == true;
         var myProfileId = isAuthenticated ? User.GetProfileId() : (int?)null;
 
-        // Sichtbarkeit:
-        // - Gast: nur öffentliche Songs
-        // - Eingeloggt: öffentliche + eigene private Songs
-        var songs = await _context.Songs
+        var query = _context.Songs
             .Where(s => s.ArtistId == id)
-            .Where(s => s.IsPublic || (isAuthenticated && s.CreatedByUserId == myProfileId))
+            .AsQueryable();
+
+        // Sichtbarkeit:
+        // - Admin: alle Songs (inkl. private + hidden)
+        // - Gast/User: nur nicht administrativ ausgeblendete Songs
+        //   sowie öffentliche + eigene private Songs
+        if (!IsAdmin)
+        {
+            query = query.Where(s =>
+                !s.IsHiddenByAdmin &&
+                (s.IsPublic || (isAuthenticated && s.CreatedByUserId == myProfileId)));
+        }
+
+        var songs = await query
             .OrderBy(s => s.Title)
             .ToListAsync();
 
