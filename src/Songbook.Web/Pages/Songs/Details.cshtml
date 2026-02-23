@@ -13,6 +13,14 @@
     </a>
 </p>
 
+@if (Model.IsAdmin)
+{
+    <p class="text-muted mb-4">
+        @T["OwnerLabel"]:
+        <span class="fw-semibold">@(Model.Song.CreatedByUser?.DisplayName ?? Model.Song.CreatedByUserId?.ToString() ?? "-")</span>
+    </p>
+}
+
 <pre class="song-text">
 @Model.Song.Content
 </pre>

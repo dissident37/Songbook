@@ -21,6 +21,9 @@
   <data name="ArtistColumn" xml:space="preserve">
     <value>Artist</value>
   </data>
+  <data name="OwnerColumn" xml:space="preserve">
+    <value>Owner</value>
+  </data>
   <data name="AddSongButton" xml:space="preserve">
     <value>+ Add song</value>
   </data>

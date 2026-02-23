@@ -24,4 +24,7 @@
   <data name="AddSongButton" xml:space="preserve">
     <value>+ Добавить песню</value>
   </data>
+  <data name="OwnerColumn" xml:space="preserve">
+    <value>Владелец</value>
+  </data>
 </root>

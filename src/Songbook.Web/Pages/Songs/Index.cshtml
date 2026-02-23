@@ -9,6 +9,10 @@
         <tr>
             <th>@T["SongColumn"]</th>
             <th>@T["ArtistColumn"]</th>
+            @if (Model.IsAdmin)
+            {
+                <th>@T["OwnerColumn"]</th>
+            }
         </tr>
     </thead>
     <tbody>
@@ -29,6 +33,10 @@
                 @song.Artist.Name
                 </a>
             </td>
+            @if (Model.IsAdmin)
+            {
+                <td>@(song.CreatedByUser?.DisplayName ?? song.CreatedByUserId?.ToString() ?? "-")</td>
+            }
         </tr>
 }
     </tbody>

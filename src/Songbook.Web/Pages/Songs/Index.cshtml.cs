@@ -16,23 +16,26 @@ public class SongIndexModel : PageModel
     }
 
     public IList<Song> SongList { get; set; } = [];
+    public bool IsAdmin => User.IsInRole("Admin");
 
     public async Task OnGetAsync()
     {
             var query = _context.Songs
             .Include(s => s.Artist)
+            .Include(s => s.CreatedByUser)
             .AsQueryable();
 
-        // Nicht eingeloggt -> nur öffentliche Songs
-        if (User.Identity?.IsAuthenticated != true)
+        if (!IsAdmin)
         {
-            query = query.Where(s => s.IsPublic);
-        }
-        else
-        {
-            // Eingeloggt -> öffentliche + eigene private Songs
-            var myProfileId = User.GetProfileId();
-            query = query.Where(s => s.IsPublic || s.CreatedByUserId == myProfileId);
+            if (User.Identity?.IsAuthenticated != true)
+            {
+                query = query.Where(s => s.IsPublic);
+            }
+            else
+            {
+                var myProfileId = User.GetProfileId();
+                query = query.Where(s => s.IsPublic || s.CreatedByUserId == myProfileId);
+            }
         }
 
         SongList = await query.ToListAsync();

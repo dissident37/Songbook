@@ -17,6 +17,7 @@ public class DetailsModel : PageModel
     }
 
     public Song? Song { get; set; }
+    public bool IsAdmin => User.IsInRole("Admin");
 
     public async Task<IActionResult> OnGetAsync(int id)
     {
@@ -26,11 +27,17 @@ public class DetailsModel : PageModel
         var isAuthenticated = User.Identity?.IsAuthenticated == true;
         var myProfileId = isAuthenticated ? User.GetProfileId() : (int?)null;
 
-        Song = await _context.Songs
+        var query = _context.Songs
             .Include(s => s.Artist)
-            .Where(s => s.Id == id)
-            .Where(s => s.IsPublic || (isAuthenticated && s.CreatedByUserId == myProfileId))
-            .FirstOrDefaultAsync();
+            .Include(s => s.CreatedByUser)
+            .Where(s => s.Id == id);
+
+        if (!IsAdmin)
+        {
+            query = query.Where(s => s.IsPublic || (isAuthenticated && s.CreatedByUserId == myProfileId));
+        }
+
+        Song = await query.FirstOrDefaultAsync();
 
         if (Song == null)
             return NotFound();
