@@ -55,9 +55,10 @@ public class EditModel : PageModel
         if (song == null)
             return NotFound();
 
-        // Ownership: nur der Besitzer darf editieren
+        // Ownership: Besitzer oder Admin darf editieren
+        var isAdmin = User.IsInRole("Admin");
         var myProfileId = User.GetProfileId();
-        if (song.CreatedByUserId != myProfileId)
+        if (!isAdmin && song.CreatedByUserId != myProfileId)
             return Forbid();
 
         Input.Title = song.Title;
@@ -80,9 +81,10 @@ public class EditModel : PageModel
         if (song == null)
             return NotFound();
 
-        // Ownership: nur der Besitzer darf speichern
+        // Ownership: Besitzer oder Admin darf speichern
+        var isAdmin = User.IsInRole("Admin");
         var myProfileId = User.GetProfileId();
-        if (song.CreatedByUserId != myProfileId)
+        if (!isAdmin && song.CreatedByUserId != myProfileId)
             return Forbid();
 
         // In Edit darf kein neuer Artist angelegt werden: nur vorhandene auswählen
