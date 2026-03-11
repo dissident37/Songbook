@@ -1,15 +1,23 @@
-﻿@page
+@page
 @model Songbook.Web.Pages.Artists.CreateModel
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer T
 
-<h1>Новый артист</h1>
+<h1>@T["Title"]</h1>
 
 <form method="post" class="mt-3">
+    <!-- Validierungsfehler anzeigen -->
+    <div asp-validation-summary="All" class="text-danger"></div>
+
     <div class="mb-3">
-        <label asp-for="Artist.Name" class="form-label"></label>
+        <label asp-for="Artist.Name" class="form-label">@T["Name"]</label>
         <input asp-for="Artist.Name" class="form-control" />
         <span asp-validation-for="Artist.Name" class="text-danger"></span>
     </div>
 
-    <button type="submit" class="btn btn-primary">Сохранить</button>
-    <a asp-page="Index" class="btn btn-secondary">Отмена</a>
+    <button type="submit" class="btn btn-primary">@T["Save"]</button>
+    <a asp-page="Index" class="btn btn-secondary">@T["Cancel"]</a>
 </form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

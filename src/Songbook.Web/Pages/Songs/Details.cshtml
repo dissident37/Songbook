@@ -1,16 +1,42 @@
 @page "{id:int}"
 @model Songbook.Web.Pages.Songs.DetailsModel
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer T
 
 <h1 class="mb-1">@Model.Song.Title</h1>
 
 <p class="text-muted mb-4">
-    Исполнитель:
+    @T["ArtistLabel"]:
     <a asp-page="/Artists/Details"
        asp-route-id="@Model.Song.Artist.Id"
        class="text-decoration-none fw-semibold">
         @Model.Song.Artist.Name
     </a>
 </p>
+
+@if (Model.IsAdmin)
+{
+    <p class="text-muted mb-4">
+        @T["OwnerLabel"]:
+        <span class="fw-semibold">@(Model.Song.CreatedByUser?.DisplayName ?? Model.Song.CreatedByUserId?.ToString() ?? "-")</span>
+    </p>
+
+    @if (Model.Song.IsHiddenByAdmin)
+    {
+        <div class="alert alert-warning py-2">
+            <div>
+                <strong>@T["ModerationStatusLabel"]:</strong>
+                @T["HiddenBadge"]
+            </div>
+            @if (!string.IsNullOrWhiteSpace(Model.Song.HiddenReason))
+            {
+                <div>
+                    <strong>@T["HiddenReasonLabel"]:</strong>
+                    @Model.Song.HiddenReason
+                </div>
+            }
+        </div>
+    }
+}
 
 <pre class="song-text">
 @Model.Song.Content
@@ -20,17 +46,17 @@
     <a asp-page="Edit"
        asp-route-id="@Model.Song.Id"
        class="btn btn-outline-primary">
-        ✏ Редактировать
+        @T["Edit"]
     </a>
 
     <a asp-page="Delete"
        asp-route-id="@Model.Song.Id"
        class="btn btn-outline-danger">
-        🗑 Удалить
+        @T["Delete"]
     </a>
 
     <a asp-page="/Songs/Index"
        class="btn btn-secondary ms-auto">
-        ← Назад к списку песен
+        @T["BackToList"]
     </a>
 </div>

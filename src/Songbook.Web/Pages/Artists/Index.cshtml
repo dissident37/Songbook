@@ -1,14 +1,15 @@
-﻿@page
+@page
 @model Songbook.Web.Pages.Artists.IndexModel
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer T
 
-<h1 class="mb-4">Артисты</h1>
+<h1 class="mb-4">@T["Title"]</h1>
 <p class="text-muted">
-    Выберите артиста для просмотра песен
+    @T["Subtitle"]
 </p>
 
 @if (!Model.Artists.Any())
 {
-    <p>Артисты не найдены.</p>
+    <p>@T["Empty"]</p>
 }
 else
 {
@@ -23,7 +24,7 @@ else
                 </a>
 
                 <span class="text-muted">
-                    @artist.Songs.Count песен
+                    @T["SongsCount", artist.Songs.Count]
                 </span>
             </li>
         }
@@ -32,6 +33,9 @@ else
 
 <hr />
 
-<a asp-page="Create" class="btn btn-sm btn-outline-secondary">
-    ➕ Добавить артиста
-</a>
+@if (User.IsInRole("Admin"))
+{
+    <a asp-page="Create" class="btn btn-sm btn-outline-secondary">
+        @T["CreateNew"]
+    </a>
+}

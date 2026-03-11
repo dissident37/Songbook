@@ -1,26 +1,34 @@
 using Microsoft.EntityFrameworkCore;
 using Songbook.Web.Models;
 
+
 namespace Songbook.Web.Data;
 
 public class SongbookDbContext : DbContext
+
 {
     public SongbookDbContext(DbContextOptions<SongbookDbContext> options)
         : base(options)
     {
     }
 
+    public DbSet<User> Users => Set<User>();
     public DbSet<Song> Songs => Set<Song>();
     public DbSet<Artist> Artists => Set<Artist>();
     public DbSet<Chord> Chords => Set<Chord>();
     public DbSet<SongChord> SongChords => Set<SongChord>();
-    public DbSet<User> Users => Set<User>();
     public DbSet<Playlist> Playlists => Set<Playlist>();
     public DbSet<PlaylistSong> PlaylistSongs => Set<PlaylistSong>();
 
-protected override void OnModelCreating(ModelBuilder modelBuilder)
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<User>().ToTable("Users");
+
+        modelBuilder.Entity<User>()
+            .HasIndex(u => u.IdentityUserId)
+            .IsUnique();
 
         // ---- Song ↔ Artist (1:N)
         modelBuilder.Entity<Song>()

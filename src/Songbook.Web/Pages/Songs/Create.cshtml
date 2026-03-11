@@ -1,114 +1,113 @@
 @page
 @model Songbook.Web.Pages.Songs.CreateModel
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer T
 
-<h1>Добавить песню</h1>
+<h1>@T["Title"]</h1>
 
 <form method="post">
 
-    <!-- ИСПОЛНИТЕЛЬ (ВСЕГДА В DOM) -->
+    <!-- РРЎРџРћР›РќРРўР•Р›Р¬ (Р’РЎР•Р“Р”Рђ Р’ DOM) -->
     <div class="mb-3 position-relative">
-        <label class="form-label">Исполнитель</label>
+        <label class="form-label">@T["ArtistLabel"]</label>
 
-        <input type="text"
-               class="form-control"
-               id="artistInput"
-               name="Input.ArtistName"
-               value="@Model.Input.ArtistName"
-               autocomplete="off" />
+        <input type="text" class="form-control" id="artistInput" name="Input.ArtistName" value="@Model.Input.ArtistName"
+            autocomplete="off" />
 
-        <input type="hidden"
-               id="artistIdInput"
-               name="Input.SelectedArtistId"
-               value="@Model.Input.SelectedArtistId" />
+        <input type="hidden" id="artistIdInput" name="Input.SelectedArtistId" value="@Model.Input.SelectedArtistId" />
 
-        <ul class="list-group position-absolute w-100"
-            id="artistSuggestions"
+        <ul class="list-group position-absolute w-100" id="artistSuggestions"
             style="z-index:1000; display:none; max-height:240px; overflow:auto;">
         </ul>
     </div>
 
-    <!-- НАЗВАНИЕ ПЕСНИ -->
+    <!-- РќРђР—Р’РђРќРР• РџР•РЎРќР -->
     <div class="mb-3">
-        <label class="form-label">Название песни</label>
+        <label class="form-label">@T["SongTitleLabel"]</label>
         <input class="form-control" asp-for="Input.Title" />
     </div>
 
-    <!-- ТЕКСТ -->
+    <!-- РўР•РљРЎРў -->
     <div class="mb-3">
-        <label class="form-label">Текст (с аккордами)</label>
-        <textarea class="form-control"
-                  rows="10"
-                  asp-for="Input.Content"></textarea>
+        <label class="form-label">@T["ContentLabel"]</label>
+        <textarea class="form-control" rows="10" asp-for="Input.Content"></textarea>
     </div>
 
-    <button type="submit" class="btn btn-primary">Сохранить</button>
-    <a asp-page="/Songs/Index" class="btn btn-secondary">Отмена</a>
+    <div class="form-check mb-3">
+        <input class="form-check-input" asp-for="Input.IsPublic" />
+        <label class="form-check-label" asp-for="Input.IsPublic">
+            @T["IsPublicLabel"]
+        </label>
+    </div>
+
+
+    <button type="submit" class="btn btn-primary">@T["Save"]</button>
+    <a asp-page="/Songs/Index" class="btn btn-secondary">@T["Cancel"]</a>
 </form>
 
 <script>
-document.addEventListener("DOMContentLoaded", () => {
+    document.addEventListener("DOMContentLoaded", () => {
 
-    const input = document.getElementById("artistInput");
-    const list = document.getElementById("artistSuggestions");
-    const artistIdInput = document.getElementById("artistIdInput");
+        const input = document.getElementById("artistInput");
+        const list = document.getElementById("artistSuggestions");
+        const artistIdInput = document.getElementById("artistIdInput");
 
-    if (!input || !list || !artistIdInput) return;
+        if (!input || !list || !artistIdInput) return;
 
-    let timer = null;
+        let timer = null;
 
-    input.addEventListener("input", () => {
-        const term = input.value.trim();
-        artistIdInput.value = "";
+        input.addEventListener("input", () => {
+            const term = input.value.trim();
+            artistIdInput.value = "";
 
-        clearTimeout(timer);
+            clearTimeout(timer);
 
-        if (term.length < 2) {
-            list.style.display = "none";
-            list.innerHTML = "";
-            return;
-        }
-
-        timer = setTimeout(async () => {
-            const response = await fetch(
-                `?handler=SearchArtists&term=${encodeURIComponent(term)}`
-            );
-
-            if (!response.ok) {
+            if (term.length < 2) {
                 list.style.display = "none";
+                list.innerHTML = "";
                 return;
             }
 
-            const artists = await response.json();
-            list.innerHTML = "";
+            timer = setTimeout(async () => {
+                const response = await fetch(
+                    `?handler=SearchArtists&term=${encodeURIComponent(term)}`
+                );
 
-            if (!artists || artists.length === 0) {
-                list.style.display = "none";
-                return;
-            }
-
-            artists.forEach(a => {
-                const item = document.createElement("li");
-                item.className = "list-group-item list-group-item-action";
-                item.textContent = a.name;
-
-                item.addEventListener("click", () => {
-                    input.value = a.name;
-                    artistIdInput.value = a.id;
+                if (!response.ok) {
                     list.style.display = "none";
-                    list.innerHTML = "";
+                    return;
+                }
+
+                const artists = await response.json();
+                list.innerHTML = "";
+
+                if (!artists || artists.length === 0) {
+                    list.style.display = "none";
+                    return;
+                }
+
+                artists.forEach(a => {
+                    const item = document.createElement("li");
+                    item.className = "list-group-item list-group-item-action";
+                    item.textContent = a.name;
+
+                    item.addEventListener("click", () => {
+                        input.value = a.name;
+                        artistIdInput.value = a.id;
+                        list.style.display = "none";
+                        list.innerHTML = "";
+                    });
+
+                    list.appendChild(item);
                 });
 
-                list.appendChild(item);
-            });
+                list.style.display = "block";
+            }, 200);
+        });
 
-            list.style.display = "block";
-        }, 200);
+        document.addEventListener("click", (e) => {
+            if (!list.contains(e.target) && e.target !== input) {
+                list.style.display = "none";
+            }
+        });
     });
-
-    document.addEventListener("click", (e) => {
-        if (!list.contains(e.target) && e.target !== input) {
-            list.style.display = "none";
-        }
-    });
-});
 </script>

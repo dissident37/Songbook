@@ -3,8 +3,12 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Songbook.Web.Data;
 using Songbook.Web.Models;
+using Microsoft.AspNetCore.Authorization;
+
 
 namespace Songbook.Web.Pages.Artists;
+
+[Authorize(Policy = "AdminOnly")]
 
 public class DeleteModel : PageModel
 {

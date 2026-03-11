@@ -1,13 +1,18 @@
 @page
 @model Songbook.Web.Pages.Songs.SongIndexModel
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer T
 
-<h1 class="mb-3">Песни</h1>
+<h1 class="mb-3">@T["Title"]</h1>
 
 <table class="table table-hover">
     <thead>
         <tr>
-            <th>Песня</th>
-            <th>Исполнитель</th>
+            <th>@T["SongColumn"]</th>
+            <th>@T["ArtistColumn"]</th>
+            @if (Model.IsAdmin)
+            {
+                <th>@T["OwnerColumn"]</th>
+            }
         </tr>
     </thead>
     <tbody>
@@ -20,6 +25,10 @@
                    class="fw-semibold text-decoration-none">
                     @song.Title
                 </a>
+                @if (Model.IsAdmin && song.IsHiddenByAdmin)
+                {
+                    <span class="badge text-bg-warning ms-2">@T["HiddenBadge"]</span>
+                }
             </td>
             <td>
                 <a asp-page="/Artists/Details"
@@ -28,9 +37,13 @@
                 @song.Artist.Name
                 </a>
             </td>
+            @if (Model.IsAdmin)
+            {
+                <td>@(song.CreatedByUser?.DisplayName ?? song.CreatedByUserId?.ToString() ?? "-")</td>
+            }
         </tr>
 }
     </tbody>
 </table>
 
-<a asp-page="Create" class="btn btn-primary">➕ Добавить песню</a>
+<a asp-page="Create" class="btn btn-primary">@T["AddSongButton"]</a>
