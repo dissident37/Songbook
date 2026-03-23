@@ -182,7 +182,7 @@ Es existiert ein `src/Songbook.Web/Dockerfile` für einen Build-/Runtime-Contain
 Wichtiger aktueller Stand:
 
 - Projekt targetet **.NET 8**
-- Dockerfile verwendet derzeit **.NET 9 SDK/Runtime Images**
+- Dockerfile verwendet derzeit **.NET 8 SDK/Runtime Images**
 
 Das ist ein realer Stand im Repository und sollte vor produktivem Einsatz konsistent auf dieselbe Major-Version gebracht werden.
 
