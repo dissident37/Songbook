@@ -23,5 +23,18 @@ services:
     depends_on:
       - db
 
+  web:
+    build:
+      context: ../src/Songbook.Web
+      dockerfile: Dockerfile
+    container_name: songbook_web
+    restart: always
+    ports:
+      - "5000:8080"
+    depends_on:
+      - db
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+
 volumes:
   songbook_data:
