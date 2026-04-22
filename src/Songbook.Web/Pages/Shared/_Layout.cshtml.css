@@ -1,48 +1,119 @@
-﻿/* Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-for details on configuring this project to bundle and minify static web assets. */
-
 a.navbar-brand {
-  white-space: normal;
-  text-align: center;
-  word-break: break-all;
+    white-space: normal;
+    text-align: center;
+    word-break: break-all;
 }
 
-a {
-  color: #0077cc;
+/* --- Header-Bereich --- */
+header {
+    background-color: var(--sb-bg-card) !important;
+    border-bottom-color: var(--sb-border) !important;
 }
 
+/* --- Navigations-Links --- */
+header .nav-link {
+    color: var(--sb-text-muted);
+    font-family: 'Roboto Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+}
+header .nav-link:hover,
+header .nav-link.active,
+header .nav-link.link-body-emphasis {
+    color: var(--sb-text) !important;
+}
+header .nav-link.link-secondary {
+    color: var(--sb-accent) !important;
+    font-size: 1.05rem;
+}
+header .nav-link.link-secondary:hover {
+    color: var(--sb-accent-h) !important;
+}
+
+/* --- Sprachselektor im Header --- */
+header .form-select {
+    background-color: var(--sb-bg-input);
+    border-color: var(--sb-border);
+    color: var(--sb-text-muted);
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+    min-width: 60px;
+}
+header .form-select:focus {
+    border-color: var(--sb-accent);
+    color: var(--sb-text);
+}
+
+/* --- Suchfeld im Header --- */
+header .form-control {
+    background-color: var(--sb-bg-input);
+    border-color: var(--sb-border);
+    color: var(--sb-text);
+    max-width: 200px;
+}
+header .form-control::placeholder {
+    color: var(--sb-text-muted);
+}
+header .form-control:focus {
+    border-color: var(--sb-accent);
+}
+
+/* --- Avatar-Kreis (Login-Partial) --- */
+.rounded-circle.bg-secondary-subtle {
+    background-color: var(--sb-accent) !important;
+    color: #fff !important;
+    font-family: 'Roboto Condensed', sans-serif;
+    font-weight: 700;
+}
+
+/* --- Primäre Aktionen und Pill-Navigation --- */
 .btn-primary {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+    color: #fff;
+    background-color: var(--sb-accent);
+    border-color: var(--sb-accent);
 }
 
-.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+.nav-pills .nav-link.active,
+.nav-pills .show > .nav-link {
+    color: #fff;
+    background-color: var(--sb-accent);
+    border-color: var(--sb-accent);
 }
 
+/* --- Trennlinien --- */
 .border-top {
-  border-top: 1px solid #e5e5e5;
+    border-top: 1px solid var(--sb-border) !important;
 }
 .border-bottom {
-  border-bottom: 1px solid #e5e5e5;
+    border-bottom: 1px solid var(--sb-border) !important;
 }
 
 .box-shadow {
-  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .4);
 }
 
 button.accept-policy {
-  font-size: 1rem;
-  line-height: inherit;
+    font-size: 1rem;
+    line-height: inherit;
 }
 
+/* --- Footer --- */
 .footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  white-space: nowrap;
-  line-height: 60px;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px;
+    background-color: var(--sb-bg-card);
+    border-top-color: var(--sb-border) !important;
+    color: var(--sb-text-muted);
+}
+.footer a {
+    color: var(--sb-accent);
+}
+.footer a:hover {
+    color: var(--sb-accent-h);
 }

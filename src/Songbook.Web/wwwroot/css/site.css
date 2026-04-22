@@ -1,31 +1,285 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap');
+
+/* --- Farbvariablen (Rock/Punk-Thema) --- */
+:root {
+    --sb-bg:          #110808;
+    --sb-bg-card:     #1e0c0c;
+    --sb-bg-input:    #2a1010;
+    --sb-border:      #4a1a1a;
+    --sb-accent:      #c0392b;
+    --sb-accent-h:    #e74c3c;
+    --sb-text:        #f5f0e8;
+    --sb-text-muted:  #a08080;
+    --sb-chord:       #e8a838;
+
+    /* Bootstrap-Variablen überschreiben */
+    --bs-body-bg:           var(--sb-bg);
+    --bs-body-color:        var(--sb-text);
+    --bs-border-color:      var(--sb-border);
+    --bs-secondary-color:   var(--sb-text-muted);
+    --bs-link-color:        var(--sb-accent);
+    --bs-link-hover-color:  var(--sb-accent-h);
+    --bs-card-bg:           var(--sb-bg-card);
+    --bs-table-bg:          transparent;
+    --bs-table-striped-bg:  rgba(192, 57, 43, 0.06);
+    --bs-table-hover-bg:    rgba(192, 57, 43, 0.12);
+    --bs-input-bg:          var(--sb-bg-input);
+    --bs-form-control-bg:   var(--sb-bg-input);
+}
+
+/* --- Basis --- */
 html {
-  font-size: 14px;
+    font-size: 14px;
+    position: relative;
+    min-height: 100%;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
+    html {
+        font-size: 16px;
+    }
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+    background-color: var(--sb-bg);
+    color: var(--sb-text);
+    position: relative;
 }
 
-.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
-  color: var(--bs-secondary-color);
-  text-align: end;
+/* --- Hintergrundtextur (SVG-Rauschen) --- */
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    opacity: 0.045;
+    pointer-events: none;
+    z-index: 0;
 }
 
-.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
-  text-align: start;
+/* Inhalt über der Textur */
+body > * {
+    position: relative;
+    z-index: 1;
+}
+
+/* --- Typografie --- */
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Roboto Condensed', sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--sb-text);
+}
+
+/* --- Links --- */
+a {
+    color: var(--sb-accent);
+    transition: color 0.2s;
+}
+a:hover {
+    color: var(--sb-accent-h);
+}
+
+/* --- Buttons --- */
+.btn-primary {
+    background-color: var(--sb-accent);
+    border-color: var(--sb-accent);
+    color: #fff;
+    font-family: 'Roboto Condensed', sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+.btn-primary:hover, .btn-primary:focus, .btn-primary:active {
+    background-color: var(--sb-accent-h);
+    border-color: var(--sb-accent-h);
+    color: #fff;
+}
+.btn-outline-secondary {
+    border-color: var(--sb-border);
+    color: var(--sb-text-muted);
+}
+.btn-outline-secondary:hover {
+    background-color: var(--sb-bg-card);
+    border-color: var(--sb-accent);
+    color: var(--sb-accent);
+}
+.btn-outline-danger {
+    border-color: var(--sb-accent);
+    color: var(--sb-accent);
+}
+.btn-outline-danger:hover {
+    background-color: var(--sb-accent);
+    color: #fff;
+}
+
+/* Fokus-Ringe */
+.btn:focus, .btn:active:focus, .form-control:focus, .form-check-input:focus {
+    box-shadow: 0 0 0 0.15rem rgba(192, 57, 43, 0.45);
+}
+
+/* --- Formulare --- */
+.form-control, .form-select {
+    background-color: var(--sb-bg-input);
+    border-color: var(--sb-border);
+    color: var(--sb-text);
+}
+.form-control:focus, .form-select:focus {
+    background-color: var(--sb-bg-input);
+    border-color: var(--sb-accent);
+    color: var(--sb-text);
+}
+.form-control::placeholder {
+    color: var(--sb-text-muted);
+}
+.form-label {
+    color: var(--sb-text-muted);
+    font-size: 0.85em;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+.form-floating > .form-control-plaintext::placeholder,
+.form-floating > .form-control::placeholder {
+    color: var(--sb-text-muted);
+    text-align: end;
+}
+.form-floating > .form-control-plaintext:focus::placeholder,
+.form-floating > .form-control:focus::placeholder {
+    text-align: start;
+}
+
+/* --- Tabellen --- */
+.table {
+    --bs-table-bg: transparent;
+    --bs-table-color: var(--sb-text);
+    --bs-table-border-color: var(--sb-border);
+    --bs-table-hover-bg: rgba(192, 57, 43, 0.12);
+    --bs-table-striped-bg: rgba(192, 57, 43, 0.06);
+}
+.table thead th {
+    font-family: 'Roboto Condensed', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--sb-text-muted);
+    border-color: var(--sb-border);
+}
+.table td, .table th {
+    border-color: var(--sb-border);
+}
+
+/* --- Listen-Gruppen --- */
+.list-group-item {
+    background-color: var(--sb-bg-card);
+    border-color: var(--sb-border);
+    color: var(--sb-text);
+}
+.list-group-item:hover {
+    background-color: rgba(192, 57, 43, 0.1);
+}
+
+/* --- Karten --- */
+.card {
+    background-color: var(--sb-bg-card);
+    border-color: var(--sb-border);
+    color: var(--sb-text);
+}
+.card-header, .card-footer {
+    background-color: rgba(0,0,0,0.2);
+    border-color: var(--sb-border);
+}
+
+/* --- Badges --- */
+.badge.text-bg-warning {
+    background-color: #7a4f00 !important;
+    color: #ffd700 !important;
+}
+.badge.text-bg-secondary {
+    background-color: var(--sb-bg-card) !important;
+    color: var(--sb-text-muted) !important;
+    border: 1px solid var(--sb-border);
+}
+
+/* --- Alerts --- */
+.alert-warning {
+    background-color: rgba(122, 79, 0, 0.25);
+    border-color: #7a4f00;
+    color: #ffd700;
+}
+.alert-danger {
+    background-color: rgba(192, 57, 43, 0.2);
+    border-color: var(--sb-accent);
+    color: #ff9999;
+}
+.alert-info {
+    background-color: rgba(30, 12, 12, 0.6);
+    border-color: var(--sb-border);
+    color: var(--sb-text-muted);
+}
+
+/* --- Text-Hilfstexte --- */
+.text-muted {
+    color: var(--sb-text-muted) !important;
+}
+
+/* --- Dropdown-Menü (Autovervollständigung) --- */
+.dropdown-menu {
+    background-color: var(--sb-bg-card);
+    border-color: var(--sb-border);
+}
+.dropdown-item {
+    color: var(--sb-text);
+}
+.dropdown-item:hover, .dropdown-item:focus {
+    background-color: rgba(192, 57, 43, 0.2);
+    color: var(--sb-accent-h);
+}
+
+/* --- Song-Text (Akkorde + Text) --- */
+pre.song-text {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: var(--sb-text);
+    background-color: var(--sb-bg-card);
+    border: 1px solid var(--sb-border);
+    border-radius: 6px;
+    padding: 1.5rem;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+/* --- Nav-Pillen --- */
+.nav-pills .nav-link.active,
+.nav-pills .show > .nav-link {
+    background-color: var(--sb-accent);
+    color: #fff;
+}
+
+/* --- Hilfstexte für Grenzen --- */
+.border-top {
+    border-top: 1px solid var(--sb-border) !important;
+}
+.border-bottom {
+    border-bottom: 1px solid var(--sb-border) !important;
+}
+
+.box-shadow {
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .4);
+}
+
+/* --- Sonstiges --- */
+button.accept-policy {
+    font-size: 1rem;
+    line-height: inherit;
+}
+
+/* --- Footer --- */
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px;
 }
