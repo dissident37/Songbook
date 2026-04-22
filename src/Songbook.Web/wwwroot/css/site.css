@@ -30,8 +30,6 @@
 /* --- Basis --- */
 html {
     font-size: 14px;
-    position: relative;
-    min-height: 100%;
 }
 
 @media (min-width: 768px) {
@@ -41,7 +39,6 @@ html {
 }
 
 body {
-    margin-bottom: 60px;
     background-color: var(--sb-bg);
     color: var(--sb-text);
     position: relative;
@@ -248,7 +245,36 @@ pre.song-text {
     padding: 1.5rem;
     white-space: pre-wrap;
     word-break: break-word;
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
 }
+
+/* --- Helles Thema fuer Song-Text --- */
+[data-song-theme="light"] pre.song-text {
+    background-color: #faf8f4;
+    color: #1a1a1a;
+    border-color: #d0c8c0;
+}
+
+/* --- Theme-Toggle-Button --- */
+.btn-theme-toggle {
+    background: transparent;
+    border: 1px solid var(--sb-border);
+    color: var(--sb-text-muted);
+    padding: 0.2rem 0.5rem;
+    font-size: 1rem;
+    line-height: 1;
+    border-radius: 4px;
+    transition: border-color 0.2s, color 0.2s;
+}
+.btn-theme-toggle:hover {
+    border-color: var(--sb-accent);
+    color: var(--sb-text);
+}
+/* Symbole je nach aktivem Thema ein-/ausblenden */
+[data-song-theme="dark"]  .theme-icon-light { display: none; }
+[data-song-theme="dark"]  .theme-icon-dark  { display: inline; }
+[data-song-theme="light"] .theme-icon-dark  { display: none; }
+[data-song-theme="light"] .theme-icon-light { display: inline; }
 
 /* --- Nav-Pillen --- */
 .nav-pills .nav-link.active,
@@ -275,11 +301,8 @@ button.accept-policy {
     line-height: inherit;
 }
 
-/* --- Footer --- */
+/* --- Footer (Flexbox sticky — kein position:absolute noetig) --- */
 .footer {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
     white-space: nowrap;
     line-height: 60px;
 }

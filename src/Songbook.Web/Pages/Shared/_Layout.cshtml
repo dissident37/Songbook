@@ -2,7 +2,7 @@
 @using Songbook.Web
 @inject IStringLocalizer<SharedResource> L
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="dark">
+<html lang="en" data-bs-theme="dark" data-song-theme="dark">
 
 <head>
     <meta charset="utf-8" />
@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="~/Songbook.Web.styles.css" asp-append-version="true" />
 </head>
 
-<body>
+<body class="d-flex flex-column min-vh-100">
     @* <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
@@ -85,6 +85,10 @@
                         <option value="ru" selected="@(currentUiCulture == "ru" ? "selected" : null)">RU</option>
                     </select>
                 </form>
+                <button id="theme-toggle" class="btn btn-sm btn-theme-toggle ms-2" aria-label="Toggle song theme" title="Toggle light/dark song text">
+                    <span class="theme-icon-dark">☀️</span>
+                    <span class="theme-icon-light">🌑</span>
+                </button>
                 <div class="ms-3">
                     <partial name="_LoginPartial" />
                 </div>
@@ -92,13 +96,13 @@
             </div>
         </div>
     </header>
-    <div class="container">
+    <div class="container flex-grow-1">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer class="border-top footer text-muted mt-auto">
         <div class="container">
             &copy; 2025 - Songbook.Web - <a asp-area="" asp-page="/Privacy">Privacy</a>
         </div>
