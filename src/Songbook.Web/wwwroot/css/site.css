@@ -255,6 +255,97 @@ pre.song-text {
     border-color: #d0c8c0;
 }
 
+/* --- Двухколоночный лейаут песни --- */
+.song-layout {
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+}
+.song-body {
+    flex: 1 1 0;
+    min-width: 0;
+}
+.chord-panel {
+    flex: 0 0 190px;
+    width: 190px;
+    position: sticky;
+    top: 1rem;
+    max-height: calc(100vh - 5rem);
+    overflow-y: auto;
+    background-color: var(--sb-bg-card);
+    border: 1px solid var(--sb-border);
+    border-radius: 6px;
+    padding: 0.75rem;
+}
+.chord-panel-title {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--sb-text-muted);
+    margin-bottom: 0.6rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 1px solid var(--sb-border);
+}
+@media (max-width: 767px) {
+    .song-layout { flex-direction: column; }
+    .chord-panel { flex: none; width: 100%; position: static; max-height: none; }
+}
+
+/* --- Группа аккорда в панели --- */
+.chord-group {
+    margin-bottom: 0.75rem;
+    padding: 0.3rem 0.4rem;
+    border-radius: 4px;
+    border: 1px solid transparent;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+.chord-group.is-active {
+    background-color: rgba(232, 168, 56, 0.12);
+    border-color: var(--sb-chord);
+}
+.chord-group-name {
+    font-weight: 700;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    color: var(--sb-chord);
+    margin-bottom: 0.3rem;
+}
+
+/* --- Карточка схемы аккорда --- */
+.chord-card {
+    background-color: var(--sb-bg);
+    border: 1px solid var(--sb-border);
+    border-radius: 4px;
+    padding: 0.25rem;
+    margin-bottom: 0.3rem;
+    text-align: center;
+}
+.chord-img { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.chord-card--no-image {
+    border-style: dashed;
+    font-size: 0.85rem;
+    color: var(--sb-text-muted);
+    padding: 0.4rem;
+}
+
+/* --- Span аккорда в тексте песни --- */
+span.chord {
+    color: var(--sb-chord);
+    font-weight: 700;
+    cursor: pointer;
+    border-bottom: 1px dashed var(--sb-chord);
+    white-space: nowrap;
+    transition: color 0.15s;
+}
+span.chord:hover { border-bottom-style: solid; }
+span.chord.is-active {
+    background-color: rgba(232, 168, 56, 0.18);
+    border-radius: 2px;
+    border-bottom: none;
+}
+[data-song-theme="light"] span.chord { color: #b87800; border-bottom-color: #b87800; }
+[data-song-theme="light"] span.chord.is-active { background-color: rgba(184, 120, 0, 0.12); }
+
 /* --- Theme-Toggle-Button --- */
 .btn-theme-toggle {
     background: transparent;

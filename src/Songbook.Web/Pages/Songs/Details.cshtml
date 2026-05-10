@@ -38,9 +38,46 @@
     }
 }
 
-<pre class="song-text">
-@Model.Song.Content
-</pre>
+<div class="song-layout">
+
+    <div class="song-body">
+        <pre class="song-text">@Model.RenderContent()</pre>
+    </div>
+
+    @if (Model.SongChordNames.Any())
+    {
+        <aside class="chord-panel" id="chord-panel">
+            <div class="chord-panel-title">Аккорды</div>
+
+            @foreach (var name in Model.SongChordNames)
+            {
+                var groupId = "cg-" + Uri.EscapeDataString(name);
+                <div class="chord-group" id="@groupId" data-chord="@name">
+                    <div class="chord-group-name">@name</div>
+                    @if (Model.ChordDiagrams.TryGetValue(name, out var diagrams))
+                    {
+                        foreach (var chord in diagrams)
+                        {
+                            <div class="chord-card">
+                                <img src="/@chord.ImagePath"
+                                     alt="@name"
+                                     class="chord-img"
+                                     loading="lazy" />
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="chord-card chord-card--no-image">
+                            <span>@name</span>
+                        </div>
+                    }
+                </div>
+            }
+        </aside>
+    }
+
+</div>
 
 <div class="mt-4 d-flex gap-2">
     <a asp-page="Edit"
