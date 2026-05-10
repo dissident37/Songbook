@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git pull *)",
+      "Bash(dir \"d:\\\\Fachinformatiker\\\\Songbook\" -Recurse -Directory)",
+      "PowerShell(Get-ChildItem -Path \"d:\\\\Fachinformatiker\\\\Songbook\" -Directory | Select-Object -First 20 | ForEach-Object { $_.FullName })",
+      "Bash(dotnet build *)",
+      "Bash(Get-ChildItem -Path \"d:\\\\Fachinformatiker\\\\Songbook\" -Recurse -Directory)",
+      "Bash(Select-Object -ExpandProperty FullName)",
+      "Bash(Sort-Object)",
+      "Bash(Get-ChildItem -Path \"d:\\\\Fachinformatiker\\\\Songbook\" -File)",
+      "Bash(Select-Object -ExpandProperty Name)",
+      "PowerShell(Get-ChildItem -Path \"d:\\\\Fachinformatiker\\\\Songbook\\\\src\\\\Songbook.Web\\\\Pages\" -Recurse -File | Where-Object { $_.Extension -eq \".cs\" -or $_.Extension -eq \".cshtml\" } | Select-Object -ExpandProperty FullName | Sort-Object)"
+    ]
+  }
+}
