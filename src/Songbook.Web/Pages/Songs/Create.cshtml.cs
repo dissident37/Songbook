@@ -123,6 +123,7 @@ public class CreateModel : PageModel
         {
             Title = Input.Title,
             Content = Input.Content,
+            ContentPlain = Input.Content,
             ArtistId = artist.Id,
             IsPublic = Input.IsPublic,
             CreatedByUserId = User.GetProfileId()

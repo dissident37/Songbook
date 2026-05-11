@@ -10,7 +10,9 @@
       "Bash(Sort-Object)",
       "Bash(Get-ChildItem -Path \"d:\\\\Fachinformatiker\\\\Songbook\" -File)",
       "Bash(Select-Object -ExpandProperty Name)",
-      "PowerShell(Get-ChildItem -Path \"d:\\\\Fachinformatiker\\\\Songbook\\\\src\\\\Songbook.Web\\\\Pages\" -Recurse -File | Where-Object { $_.Extension -eq \".cs\" -or $_.Extension -eq \".cshtml\" } | Select-Object -ExpandProperty FullName | Sort-Object)"
+      "PowerShell(Get-ChildItem -Path \"d:\\\\Fachinformatiker\\\\Songbook\\\\src\\\\Songbook.Web\\\\Pages\" -Recurse -File | Where-Object { $_.Extension -eq \".cs\" -or $_.Extension -eq \".cshtml\" } | Select-Object -ExpandProperty FullName | Sort-Object)",
+      "WebFetch(domain:mychord.net)",
+      "WebFetch(domain:mychords.net)"
     ]
   }
 }

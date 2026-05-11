@@ -110,9 +110,7 @@ public class EditModel : PageModel
         song.Content = Input.Content;
         song.IsPublic = Input.IsPublic;
 
-        // Plaintext-Version für Suche/Anzeige (Akkord-Tags entfernen)
-        song.ContentPlain = System.Text.RegularExpressions.Regex.Replace(
-            Input.Content, @"\[[^\]]+\]", "");
+        song.ContentPlain = Input.Content;
 
         await _context.SaveChangesAsync();
 
