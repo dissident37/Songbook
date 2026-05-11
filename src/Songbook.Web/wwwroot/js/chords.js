@@ -38,6 +38,17 @@
         ['',        'major'],
     ];
 
+    // Akkordname → JSON-Schluessel in chords-db (C# → Csharp, F# → Fsharp)
+    // Enharmonische Equivalente auf vorhandene JSON-Schluessel mappen
+    var KEY_MAP = {
+        'C#': 'Csharp', 'Db': 'Csharp',
+        'D#': 'Eb',     'Eb': 'Eb',
+        'F#': 'Fsharp', 'Gb': 'Fsharp',
+        'G#': 'Ab',     'Ab': 'Ab',
+        'A#': 'Bb',     'Bb': 'Bb',
+        'C': 'C', 'D': 'D', 'E': 'E', 'F': 'F', 'G': 'G', 'A': 'A', 'B': 'B',
+    };
+
     // Akkordname aufteilen: "Am7" → { key: "A", suffix: "m7" }
     function parseChordName(name) {
         var keys = ['C#', 'Db', 'D#', 'Eb', 'F#', 'Gb', 'G#', 'Ab', 'A#', 'Bb', 'C', 'D', 'E', 'F', 'G', 'A', 'B'];
@@ -45,7 +56,7 @@
         var rest = name;
         for (var i = 0; i < keys.length; i++) {
             if (name.indexOf(keys[i]) === 0) {
-                key = keys[i];
+                key = KEY_MAP[keys[i]];
                 rest = name.slice(keys[i].length);
                 break;
             }
@@ -122,18 +133,14 @@
                         frets: 4,
                         showTuning: false,
                         title: '',
-                        style: 'normal',
                         color: '#e8a838',
-                        nutColor: '#e8a838',
-                        strokeColor: '#888',
-                        stringColor: '#888',
-                        fretColor: '#888',
-                        labelColor: '#111',
+                        stringColor: '#aaa',
+                        fretColor: '#aaa',
+                        fingerColor: '#e8a838',
+                        fingerTextColor: '#111',
                         fontFamily: 'inherit',
-                        fingerSize: 0.35,
-                        fingerTextSize: 0,
                         width: 160,
-                        height: 160,
+                        height: 180,
                     }).chord(chord).draw();
                 });
             });
