@@ -103,21 +103,13 @@
             xmlns: SVG_NS
         });
 
-        // Sattel oder baseFret-Beschriftung
+        // Sattel-Balken nur in offener Position
         if (nut) {
             svg.appendChild(el('rect', {
                 x: padLeft - 2, y: padTop,
                 width: 3, height: gridH,
                 fill: gridColor
             }));
-        } else {
-            var bf = el('text', {
-                x: padLeft - 4, y: padTop + strSpace * 0.5 + 3.5,
-                'font-size': 9, 'text-anchor': 'end',
-                fill: textColor, 'font-family': 'inherit'
-            });
-            bf.textContent = baseFret + 'fr';
-            svg.appendChild(bf);
         }
 
         // Bundlinien (vertikal)
@@ -206,31 +198,16 @@
             }));
         }
 
-        // Bundnummern unter dem Raster:
-        // - nut (baseFret == 1): jeden Bund (1..5) klein
-        // - sonst: nur den ersten Bund, groesser und hervorgehoben
-        if (nut) {
-            for (var fn = 0; fn < numFrets; fn++) {
-                var num = el('text', {
-                    x: padLeft + (fn + 0.5) * fretW,
-                    y: padTop + gridH + 12,
-                    'font-size': 8.5, 'text-anchor': 'middle',
-                    fill: textColor, 'font-family': 'inherit'
-                });
-                num.textContent = String(baseFret + fn);
-                svg.appendChild(num);
-            }
-        } else {
-            var firstNum = el('text', {
-                x: padLeft + 0.5 * fretW,
-                y: padTop + gridH + 15,
-                'font-size': 13, 'text-anchor': 'middle',
-                fill: textColor, 'font-family': 'inherit',
-                'font-weight': '700'
-            });
-            firstNum.textContent = String(baseFret);
-            svg.appendChild(firstNum);
-        }
+        // Nur den ersten sichtbaren Bund anzeigen, gross und hervorgehoben.
+        var firstNum = el('text', {
+            x: padLeft + 0.5 * fretW,
+            y: padTop + gridH + 15,
+            'font-size': 13, 'text-anchor': 'middle',
+            fill: textColor, 'font-family': 'inherit',
+            'font-weight': '700'
+        });
+        firstNum.textContent = String(baseFret);
+        svg.appendChild(firstNum);
 
         return svg;
     }
