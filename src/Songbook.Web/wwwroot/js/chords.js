@@ -110,10 +110,10 @@
                 containers.forEach(function (el) {
                     var name = el.getAttribute('data-chord-name');
                     var parsed = parseChordName(name);
-                    if (!parsed) return;
+                    if (!parsed) { console.warn('[chords] nicht geparst:', name); return; }
 
                     var keyChords = db.chords[parsed.key];
-                    if (!keyChords) return;
+                    if (!keyChords) { console.warn('[chords] key nicht gefunden:', parsed.key, 'fuer', name); return; }
 
                     var entry = null;
                     for (var i = 0; i < keyChords.length; i++) {
@@ -122,27 +122,32 @@
                             break;
                         }
                     }
-                    if (!entry || !entry.positions.length) return;
+                    if (!entry || !entry.positions.length) { console.warn('[chords] suffix nicht gefunden:', parsed.suffix, 'fuer', name); return; }
 
-                    // Erste Position rendern
                     var chord = toSvguitarChord(entry.positions[0]);
+                    console.log('[chords] render', name, '->', parsed, chord);
 
-                    var chart = new svguitar.SVGuitarChord(el);
-                    chart.configure({
-                        strings: 6,
-                        frets: 4,
-                        showTuning: false,
-                        title: '',
-                        color: '#e8a838',
-                        stringColor: '#aaa',
-                        fretColor: '#aaa',
-                        fingerColor: '#e8a838',
-                        fingerTextColor: '#111',
-                        fontFamily: 'inherit',
-                        width: 160,
-                        height: 180,
-                    }).chord(chord).draw();
+                    try {
+                        var chart = new svguitar.SVGuitarChord(el);
+                        chart.configure({
+                            strings: 6,
+                            frets: 4,
+                            showTuning: false,
+                            title: '',
+                            color: '#e8a838',
+                            stringColor: '#aaa',
+                            fretColor: '#aaa',
+                            fingerColor: '#e8a838',
+                            fingerTextColor: '#111',
+                            fontFamily: 'inherit',
+                            width: 160,
+                            height: 180,
+                        }).chord(chord).draw();
+                    } catch (e) {
+                        console.error('[chords] svguitar Fehler fuer', name, e);
+                    }
                 });
-            });
+            })
+            .catch(function (e) { console.error('[chords] fetch Fehler:', e); });
     });
 })();
