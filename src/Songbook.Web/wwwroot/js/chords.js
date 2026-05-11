@@ -138,6 +138,7 @@
                         chart.configure({
                             strings: 6,
                             frets: 4,
+                            orientation: 'horizontal',
                             color: '#e8a838',
                             fretColor: '#aaa',
                             fingerColor: '#e8a838',

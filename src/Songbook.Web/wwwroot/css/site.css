@@ -317,7 +317,7 @@ pre.song-text {
 /* --- SVG-Diagramm des Akkords --- */
 .chord-diagram {
     width: 100%;
-    aspect-ratio: 4 / 5;
+    aspect-ratio: 5 / 4;
 }
 .chord-diagram svg {
     display: block;
