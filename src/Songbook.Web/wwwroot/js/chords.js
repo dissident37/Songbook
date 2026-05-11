@@ -1,8 +1,6 @@
 // Akkord-Diagramme mit svguitar + chords-db rendern
 (function () {
-    // Akkordname → { key, suffix } fuer chords-db
     var SUFFIX_MAP = [
-        // Laengste Suffixe zuerst
         ['maj7b5',  'maj7b5'],
         ['maj7#5',  'maj7#5'],
         ['maj7',    'maj7'],
@@ -38,8 +36,6 @@
         ['',        'major'],
     ];
 
-    // Akkordname → JSON-Schluessel in chords-db (C# → Csharp, F# → Fsharp)
-    // Enharmonische Equivalente auf vorhandene JSON-Schluessel mappen
     var KEY_MAP = {
         'C#': 'Csharp', 'Db': 'Csharp',
         'D#': 'Eb',     'Eb': 'Eb',
@@ -49,38 +45,29 @@
         'C': 'C', 'D': 'D', 'E': 'E', 'F': 'F', 'G': 'G', 'A': 'A', 'B': 'B',
     };
 
-    // Akkordname aufteilen: "Am7" → { key: "A", suffix: "m7" }
     function parseChordName(name) {
         var keys = ['C#', 'Db', 'D#', 'Eb', 'F#', 'Gb', 'G#', 'Ab', 'A#', 'Bb', 'C', 'D', 'E', 'F', 'G', 'A', 'B'];
-        var key = null;
-        var rest = name;
         for (var i = 0; i < keys.length; i++) {
             if (name.indexOf(keys[i]) === 0) {
-                key = KEY_MAP[keys[i]];
-                rest = name.slice(keys[i].length);
-                break;
-            }
-        }
-        if (!key) return null;
-
-        for (var j = 0; j < SUFFIX_MAP.length; j++) {
-            if (rest === SUFFIX_MAP[j][0]) {
-                return { key: key, suffix: SUFFIX_MAP[j][1] };
+                var key = KEY_MAP[keys[i]];
+                var rest = name.slice(keys[i].length);
+                for (var j = 0; j < SUFFIX_MAP.length; j++) {
+                    if (rest === SUFFIX_MAP[j][0]) return { key: key, suffix: SUFFIX_MAP[j][1] };
+                }
+                return null;
             }
         }
         return null;
     }
 
-    // chords-db Position → svguitar chord-Objekt
     function toSvguitarChord(position) {
         var fingers = [];
         var frets = position.frets;
         var fingerNums = position.fingers;
         var base = position.baseFret || 1;
-
         for (var s = 0; s < frets.length; s++) {
             var fret = frets[s];
-            var str = s + 1; // svguitar: string 1 = dickste Saite (links)
+            var str = s + 1;
             if (fret === -1) {
                 fingers.push([str, 'x']);
             } else if (fret === 0) {
@@ -89,15 +76,102 @@
                 fingers.push([str, fret, fingerNums[s] > 0 ? String(fingerNums[s]) : '']);
             }
         }
-
         var barres = [];
         if (position.barres && position.barres.length > 0) {
             position.barres.forEach(function (fret) {
                 barres.push({ fret: fret, fromString: 1, toString: 6 });
             });
         }
-
         return { fingers: fingers, barres: barres, position: base > 1 ? base : undefined };
+    }
+
+    function renderSvg(el, db, name) {
+        var parsed = parseChordName(name);
+        if (!parsed) { console.warn('[chords] nicht geparst:', name); return null; }
+
+        var keyChords = db.chords[parsed.key];
+        if (!keyChords) { console.warn('[chords] key nicht gefunden:', parsed.key); return null; }
+
+        var entry = null;
+        for (var i = 0; i < keyChords.length; i++) {
+            if (keyChords[i].suffix === parsed.suffix) { entry = keyChords[i]; break; }
+        }
+        if (!entry || !entry.positions.length) { console.warn('[chords] suffix nicht gefunden:', parsed.suffix, 'fuer', name); return null; }
+
+        try {
+            var chart = new svguitar.SVGuitarChord(el);
+            chart.configure({
+                strings: 6,
+                frets: 4,
+                orientation: 'horizontal',
+                color: '#e8a838',
+                fretColor: '#aaa',
+                fingerColor: '#e8a838',
+                fingerTextColor: '#111',
+                fontFamily: 'inherit',
+            }).chord(toSvguitarChord(entry.positions[0])).draw();
+
+            var svg = el.querySelector('svg');
+            if (svg) {
+                svg.removeAttribute('width');
+                svg.removeAttribute('height');
+                svg.style.width = '100%';
+                svg.style.height = '100%';
+                svg.style.transform = 'scaleX(-1)';
+            }
+            return svg;
+        } catch (e) {
+            console.error('[chords] svguitar Fehler fuer', name, e);
+            return null;
+        }
+    }
+
+    function setupTooltip(svgCache) {
+        var songBody = document.querySelector('.song-body');
+        if (!songBody) return;
+
+        var tooltip = document.createElement('div');
+        tooltip.className = 'chord-tooltip';
+        document.body.appendChild(tooltip);
+
+        var hoverTarget = null;
+
+        function showTooltip(span) {
+            var name = span.dataset.chord;
+            var cached = svgCache[name];
+            if (!cached) return;
+
+            tooltip.innerHTML = '';
+            tooltip.appendChild(cached.cloneNode(true));
+            tooltip.style.display = 'block';
+
+            var rect = span.getBoundingClientRect();
+            var tw = tooltip.offsetWidth;
+            var th = tooltip.offsetHeight;
+            var left = rect.left;
+            var top = rect.bottom + 6;
+            if (left + tw > window.innerWidth - 8) left = window.innerWidth - tw - 8;
+            if (left < 8) left = 8;
+            if (top + th > window.innerHeight - 8) top = rect.top - th - 6;
+            tooltip.style.left = left + 'px';
+            tooltip.style.top = top + 'px';
+        }
+
+        songBody.addEventListener('mouseover', function (e) {
+            var span = e.target.closest('span.chord');
+            if (span === hoverTarget) return;
+            hoverTarget = span;
+            if (span) {
+                showTooltip(span);
+            } else {
+                tooltip.style.display = 'none';
+            }
+        });
+
+        songBody.addEventListener('mouseleave', function () {
+            hoverTarget = null;
+            tooltip.style.display = 'none';
+        });
     }
 
     function renderAll() {
@@ -114,51 +188,13 @@
                 return r.json();
             })
             .then(function (db) {
+                var svgCache = {};
                 containers.forEach(function (el) {
                     var name = el.getAttribute('data-chord-name');
-                    var parsed = parseChordName(name);
-                    if (!parsed) { console.warn('[chords] nicht geparst:', name); return; }
-
-                    var keyChords = db.chords[parsed.key];
-                    if (!keyChords) { console.warn('[chords] key nicht gefunden:', parsed.key, 'fuer', name); return; }
-
-                    var entry = null;
-                    for (var i = 0; i < keyChords.length; i++) {
-                        if (keyChords[i].suffix === parsed.suffix) {
-                            entry = keyChords[i];
-                            break;
-                        }
-                    }
-                    if (!entry || !entry.positions.length) { console.warn('[chords] suffix nicht gefunden:', parsed.suffix, 'fuer', name); return; }
-
-                    var chord = toSvguitarChord(entry.positions[0]);
-
-                    try {
-                        var chart = new svguitar.SVGuitarChord(el);
-                        chart.configure({
-                            strings: 6,
-                            frets: 4,
-                            orientation: 'horizontal',
-                            color: '#e8a838',
-                            fretColor: '#aaa',
-                            fingerColor: '#e8a838',
-                            fingerTextColor: '#111',
-                            fontFamily: 'inherit',
-                        }).chord(chord).draw();
-
-                        // svguitar setzt nur viewBox, nicht width/height-Attribute.
-                        // Fuer korrekte Skalierung im Flex-Container explizit setzen.
-                        var svg = el.querySelector('svg');
-                        if (svg) {
-                            svg.removeAttribute('width');
-                            svg.removeAttribute('height');
-                            svg.style.width = '100%';
-                            svg.style.height = '100%';
-                        }
-                    } catch (e) {
-                        console.error('[chords] svguitar Fehler fuer', name, e);
-                    }
+                    var svg = renderSvg(el, db, name);
+                    if (svg) svgCache[name] = svg.cloneNode(true);
                 });
+                setupTooltip(svgCache);
             })
             .catch(function (e) { console.error('[chords] fetch Fehler:', e); });
     }

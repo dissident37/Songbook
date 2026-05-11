@@ -325,6 +325,25 @@ pre.song-text {
     height: 100%;
 }
 
+/* --- Всплывающая схема аккорда при наведении --- */
+.chord-tooltip {
+    position: fixed;
+    z-index: 1000;
+    display: none;
+    width: 150px;
+    background-color: var(--sb-bg-card);
+    border: 1px solid var(--sb-border);
+    border-radius: 6px;
+    padding: 4px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45);
+    pointer-events: none;
+}
+.chord-tooltip svg {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
 /* --- Span аккорда в тексте песни --- */
 span.chord {
     color: var(--sb-chord);
