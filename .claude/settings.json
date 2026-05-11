@@ -29,7 +29,14 @@
       "PowerShell($json = Get-Content \"c:\\\\Users\\\\dd-00-sitkon1\\\\Documents\\\\Projects\\\\Songbook\\\\src\\\\Songbook.Web\\\\wwwroot\\\\data\\\\guitar.json\" -Raw | ConvertFrom-Json; $json.chords.Ab[0] | ConvertTo-Json -Depth 2 | Select-Object -First 5; Write-Output \"---Bb---\"; $json.chords.Bb[0].key; $json.chords.Bb[0].suffix)",
       "PowerShell($json = Get-Content \"c:\\\\Users\\\\dd-00-sitkon1\\\\Documents\\\\Projects\\\\Songbook\\\\src\\\\Songbook.Web\\\\wwwroot\\\\data\\\\guitar.json\" -Raw | ConvertFrom-Json; $pos = $json.chords.C[0].positions[0]; Write-Output \"frets type: $\\($pos.frets.GetType\\(\\).Name\\)\"; Write-Output \"frets value: $\\($pos.frets\\)\"; $pos2 = $json.chords.Ab[0].positions[0]; Write-Output \"Ab frets type: $\\($pos2.frets.GetType\\(\\).Name\\)\"; Write-Output \"Ab frets value: $\\($pos2.frets\\)\")",
       "PowerShell($json = Get-Content \"c:\\\\Users\\\\dd-00-sitkon1\\\\Documents\\\\Projects\\\\Songbook\\\\src\\\\Songbook.Web\\\\wwwroot\\\\data\\\\guitar.json\" -Raw | ConvertFrom-Json; $am = $json.chords.A | Where-Object { $_.suffix -eq 'minor' } | Select-Object -First 1; $am.positions[0] | ConvertTo-Json -Depth 5)",
-      "PowerShell($json = Get-Content \"c:\\\\Users\\\\dd-00-sitkon1\\\\Documents\\\\Projects\\\\Songbook\\\\src\\\\Songbook.Web\\\\wwwroot\\\\data\\\\guitar.json\" -Raw | ConvertFrom-Json; $json.chords.PSObject.Properties.Name -join ', ')"
+      "PowerShell($json = Get-Content \"c:\\\\Users\\\\dd-00-sitkon1\\\\Documents\\\\Projects\\\\Songbook\\\\src\\\\Songbook.Web\\\\wwwroot\\\\data\\\\guitar.json\" -Raw | ConvertFrom-Json; $json.chords.PSObject.Properties.Name -join ', ')",
+      "Bash(node -e \"const fs = require\\('fs'\\); const db = JSON.parse\\(fs.readFileSync\\('d:/Fachinformatiker/Songbook/src/Songbook.Web/wwwroot/data/guitar.json', 'utf8'\\)\\); console.log\\('top keys:', Object.keys\\(db\\)\\); console.log\\('chord keys:', Object.keys\\(db.chords\\)\\);\")",
+      "Bash(node -e \"const fs = require\\('fs'\\); const db = JSON.parse\\(fs.readFileSync\\('d:/Fachinformatiker/Songbook/src/Songbook.Web/wwwroot/data/guitar.json', 'utf8'\\)\\); console.log\\(JSON.stringify\\(db.chords.A[0], null, 2\\)\\);\")",
+      "Bash(node -e \"const fs = require\\('fs'\\); const db = JSON.parse\\(fs.readFileSync\\('d:/Fachinformatiker/Songbook/src/Songbook.Web/wwwroot/data/guitar.json', 'utf8'\\)\\); const keys = ['A','C','Csharp','D','E','Fsharp','G']; keys.forEach\\(k => { const entry = db.chords[k].find\\(c => c.suffix === 'minor' || c.suffix === 'major'\\); console.log\\(k, entry ? entry.suffix : 'NOT FOUND', entry && entry.positions ? entry.positions.length + ' positions' : ''\\); }\\);\")",
+      "PowerShell(Get-NetTCPConnection -LocalPort 5432 -ErrorAction SilentlyContinue)",
+      "Bash(node -e ' *)",
+      "Bash(awk -F'this.settings.' '{print $2}')",
+      "Bash(awk -F'[ ,;\\)]' '{print $1}')"
     ]
   }
 }

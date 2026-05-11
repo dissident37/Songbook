@@ -100,12 +100,19 @@
         return { fingers: fingers, barres: barres, position: base > 1 ? base : undefined };
     }
 
-    document.addEventListener('DOMContentLoaded', function () {
+    function renderAll() {
         var containers = document.querySelectorAll('.chord-diagram[data-chord-name]');
         if (!containers.length) return;
+        if (typeof svguitar === 'undefined' || !svguitar.SVGuitarChord) {
+            console.error('[chords] svguitar nicht geladen');
+            return;
+        }
 
         fetch('/data/guitar.json')
-            .then(function (r) { return r.json(); })
+            .then(function (r) {
+                if (!r.ok) throw new Error('HTTP ' + r.status);
+                return r.json();
+            })
             .then(function (db) {
                 containers.forEach(function (el) {
                     var name = el.getAttribute('data-chord-name');
@@ -125,29 +132,39 @@
                     if (!entry || !entry.positions.length) { console.warn('[chords] suffix nicht gefunden:', parsed.suffix, 'fuer', name); return; }
 
                     var chord = toSvguitarChord(entry.positions[0]);
-                    console.log('[chords] render', name, '->', parsed, chord);
 
                     try {
                         var chart = new svguitar.SVGuitarChord(el);
                         chart.configure({
                             strings: 6,
                             frets: 4,
-                            showTuning: false,
-                            title: '',
                             color: '#e8a838',
-                            stringColor: '#aaa',
                             fretColor: '#aaa',
                             fingerColor: '#e8a838',
                             fingerTextColor: '#111',
                             fontFamily: 'inherit',
-                            width: 160,
-                            height: 180,
                         }).chord(chord).draw();
+
+                        // svguitar setzt nur viewBox, nicht width/height-Attribute.
+                        // Fuer korrekte Skalierung im Flex-Container explizit setzen.
+                        var svg = el.querySelector('svg');
+                        if (svg) {
+                            svg.removeAttribute('width');
+                            svg.removeAttribute('height');
+                            svg.style.width = '100%';
+                            svg.style.height = '100%';
+                        }
                     } catch (e) {
                         console.error('[chords] svguitar Fehler fuer', name, e);
                     }
                 });
             })
             .catch(function (e) { console.error('[chords] fetch Fehler:', e); });
-    });
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', renderAll);
+    } else {
+        renderAll();
+    }
 })();
