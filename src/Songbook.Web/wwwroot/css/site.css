@@ -266,8 +266,8 @@ pre.song-text {
     min-width: 0;
 }
 .chord-panel {
-    flex: 0 0 290px;
-    width: 290px;
+    flex: 0 0 435px;
+    width: 435px;
     position: sticky;
     top: 1rem;
     background-color: var(--sb-bg-card);
