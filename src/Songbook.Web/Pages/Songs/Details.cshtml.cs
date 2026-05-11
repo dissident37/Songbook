@@ -23,7 +23,6 @@ public class DetailsModel : PageModel
     public Song? Song { get; set; }
     public bool IsAdmin => User.IsInRole("Admin");
     public List<string> SongChordNames { get; set; } = new();
-    public Dictionary<string, List<Chord>> ChordDiagrams { get; set; } = new();
 
     public async Task<IActionResult> OnGetAsync(int id)
     {
@@ -55,17 +54,6 @@ public class DetailsModel : PageModel
             .Select(m => m.Value)
             .Distinct(StringComparer.Ordinal)
             .ToList();
-
-        if (SongChordNames.Count > 0)
-        {
-            var chords = await _context.Chords
-                .Where(c => SongChordNames.Contains(c.Name))
-                .OrderBy(c => c.Id)
-                .ToListAsync();
-            ChordDiagrams = chords
-                .GroupBy(c => c.Name)
-                .ToDictionary(g => g.Key, g => g.ToList());
-        }
 
         return Page();
     }

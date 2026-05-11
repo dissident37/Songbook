@@ -54,24 +54,7 @@
                 var groupId = "cg-" + Uri.EscapeDataString(name);
                 <div class="chord-group" id="@groupId" data-chord="@name">
                     <div class="chord-group-name">@name</div>
-                    @if (Model.ChordDiagrams.TryGetValue(name, out var diagrams))
-                    {
-                        foreach (var chord in diagrams)
-                        {
-                            <div class="chord-card">
-                                <img src="/@chord.ImagePath"
-                                     alt="@name"
-                                     class="chord-img"
-                                     loading="lazy" />
-                            </div>
-                        }
-                    }
-                    else
-                    {
-                        <div class="chord-card chord-card--no-image">
-                            <span>@name</span>
-                        </div>
-                    }
+                    <div class="chord-diagram" data-chord-name="@name"></div>
                 </div>
             }
         </aside>
@@ -97,3 +80,8 @@
         @T["BackToList"]
     </a>
 </div>
+
+@section Scripts {
+    <script src="~/js/svguitar.umd.js"></script>
+    <script src="~/js/chords.js"></script>
+}

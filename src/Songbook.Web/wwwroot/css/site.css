@@ -266,8 +266,8 @@ pre.song-text {
     min-width: 0;
 }
 .chord-panel {
-    flex: 0 0 190px;
-    width: 190px;
+    flex: 0 0 210px;
+    width: 210px;
     position: sticky;
     top: 1rem;
     max-height: calc(100vh - 5rem);
@@ -311,21 +311,11 @@ pre.song-text {
     margin-bottom: 0.3rem;
 }
 
-/* --- Карточка схемы аккорда --- */
-.chord-card {
-    background-color: var(--sb-bg);
-    border: 1px solid var(--sb-border);
-    border-radius: 4px;
-    padding: 0.25rem;
-    margin-bottom: 0.3rem;
-    text-align: center;
-}
-.chord-img { max-width: 100%; height: auto; display: block; margin: 0 auto; }
-.chord-card--no-image {
-    border-style: dashed;
-    font-size: 0.85rem;
-    color: var(--sb-text-muted);
-    padding: 0.4rem;
+/* --- SVG-Diagramm des Akkords --- */
+.chord-diagram svg {
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
 }
 
 /* --- Span аккорда в тексте песни --- */

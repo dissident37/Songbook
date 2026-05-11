@@ -12,7 +12,19 @@
       "Bash(Select-Object -ExpandProperty Name)",
       "PowerShell(Get-ChildItem -Path \"d:\\\\Fachinformatiker\\\\Songbook\\\\src\\\\Songbook.Web\\\\Pages\" -Recurse -File | Where-Object { $_.Extension -eq \".cs\" -or $_.Extension -eq \".cshtml\" } | Select-Object -ExpandProperty FullName | Sort-Object)",
       "WebFetch(domain:mychord.net)",
-      "WebFetch(domain:mychords.net)"
+      "WebFetch(domain:mychords.net)",
+      "WebSearch",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(curl -s \"https://raw.githubusercontent.com/tombatossals/chords-db/master/lib/guitar.json\" -o \"c:/Users/dd-00-sitkon1/Documents/Projects/Songbook/src/Songbook.Web/wwwroot/data/guitar.json\")",
+      "PowerShell(New-Item -ItemType Directory -Force -Path \"c:\\\\Users\\\\dd-00-sitkon1\\\\Documents\\\\Projects\\\\Songbook\\\\src\\\\Songbook.Web\\\\wwwroot\\\\data\" | Out-Null; Invoke-WebRequest -Uri \"https://raw.githubusercontent.com/tombatossals/chords-db/master/lib/guitar.json\" -OutFile \"c:\\\\Users\\\\dd-00-sitkon1\\\\Documents\\\\Projects\\\\Songbook\\\\src\\\\Songbook.Web\\\\wwwroot\\\\data\\\\guitar.json\"; $size = \\(Get-Item \"c:\\\\Users\\\\dd-00-sitkon1\\\\Documents\\\\Projects\\\\Songbook\\\\src\\\\Songbook.Web\\\\wwwroot\\\\data\\\\guitar.json\"\\).Length; Write-Output \"Скачано: $size байт\")",
+      "PowerShell(Invoke-WebRequest -Uri \"https://omnibrain.github.io/svguitar/js/svguitar.umd.js\" -OutFile \"c:\\\\Users\\\\dd-00-sitkon1\\\\Documents\\\\Projects\\\\Songbook\\\\src\\\\Songbook.Web\\\\wwwroot\\\\js\\\\svguitar.umd.js\"; $size = \\(Get-Item \"c:\\\\Users\\\\dd-00-sitkon1\\\\Documents\\\\Projects\\\\Songbook\\\\src\\\\Songbook.Web\\\\wwwroot\\\\js\\\\svguitar.umd.js\"\\).Length; Write-Output \"Скачано: $size байт\")",
+      "PowerShell($json = Get-Content \"c:\\\\Users\\\\dd-00-sitkon1\\\\Documents\\\\Projects\\\\Songbook\\\\src\\\\Songbook.Web\\\\wwwroot\\\\data\\\\guitar.json\" -Raw | ConvertFrom-Json; $json.keys | Select-Object -First 5; Write-Output \"---\"; $json.chords.C | Select-Object -First 2 | ConvertTo-Json -Depth 10)",
+      "PowerShell($json = Get-Content \"c:\\\\Users\\\\dd-00-sitkon1\\\\Documents\\\\Projects\\\\Songbook\\\\src\\\\Songbook.Web\\\\wwwroot\\\\data\\\\guitar.json\" -Raw | ConvertFrom-Json; $json.suffixes | Select-Object -First 30)",
+      "PowerShell(Get-Command dotnet -ErrorAction SilentlyContinue; [System.IO.Directory]::GetFiles\\(\"C:\\\\Program Files\", \"dotnet.exe\", \"AllDirectories\"\\) 2>$null | Select-Object -First 3)",
+      "Read(//c/Users/dd-00-sitkon1/**)",
+      "PowerShell($dotnet = \"C:\\\\Users\\\\dd-00-sitkon1\\\\AppData\\\\Roaming\\\\Code\\\\User\\\\globalStorage\\\\ms-dotnettools.vscode-dotnet-runtime\\\\.dotnet\\\\10.0.7~x64~aspnetcore\\\\dotnet.exe\"; & $dotnet build \"c:\\\\Users\\\\dd-00-sitkon1\\\\Documents\\\\Projects\\\\Songbook\\\\src\\\\Songbook.Web\\\\Songbook.Web.csproj\" 2>&1 | Select-String -Pattern \"rror|warning CS|succeeded|failed\" | Select-Object -Last 15)",
+      "PowerShell($dotnet = \"C:\\\\Users\\\\dd-00-sitkon1\\\\AppData\\\\Roaming\\\\Code\\\\User\\\\globalStorage\\\\ms-dotnettools.vscode-dotnet-runtime\\\\.dotnet\\\\10.0.7~x64~aspnetcore\\\\dotnet.exe\"; & $dotnet build \"c:\\\\Users\\\\dd-00-sitkon1\\\\Documents\\\\Projects\\\\Songbook\\\\src\\\\Songbook.Web\\\\Songbook.Web.csproj\" 2>&1 | Select-Object -Last 20)"
     ]
   }
 }
