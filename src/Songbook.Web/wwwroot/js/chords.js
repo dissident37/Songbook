@@ -118,6 +118,17 @@
                 svg.style.width = '100%';
                 svg.style.height = '100%';
                 svg.style.transform = 'scaleX(-1)';
+
+                // Texte (Fingernummern, Lagebezeichnungen) wuerden vom Eltern-scaleX(-1)
+                // mitgespiegelt. Jeden <text> um seine eigene Mitte zurueckspiegeln,
+                // damit Glyphen lesbar bleiben, Position aber gespiegelt bleibt.
+                svg.querySelectorAll('text').forEach(function (t) {
+                    try {
+                        var bbox = t.getBBox();
+                        var cx = bbox.x + bbox.width / 2;
+                        t.setAttribute('transform', 'matrix(-1 0 0 1 ' + (2 * cx) + ' 0)');
+                    } catch (e) { /* getBBox kann auf nicht-gerenderten Elementen scheitern */ }
+                });
             }
             return svg;
         } catch (e) {
