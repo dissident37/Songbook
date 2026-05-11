@@ -317,12 +317,51 @@ pre.song-text {
 /* --- SVG-Diagramm des Akkords --- */
 .chord-diagram {
     width: 100%;
-    aspect-ratio: 5 / 4;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
 }
-.chord-diagram svg {
+.chord-diagram-svg {
+    width: 100%;
+    aspect-ratio: 220 / 140;
+}
+.chord-diagram-svg svg {
     display: block;
     width: 100%;
     height: 100%;
+}
+.chord-notation {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.65rem;
+    color: var(--sb-text-muted);
+    letter-spacing: 0.12em;
+    text-align: center;
+    margin-top: 0.1rem;
+}
+.chord-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    margin-top: 0.15rem;
+    font-size: 0.7rem;
+    color: var(--sb-text-muted);
+}
+.chord-nav-btn {
+    background: transparent;
+    border: none;
+    color: var(--sb-text-muted);
+    cursor: pointer;
+    font-size: 1.1rem;
+    line-height: 1;
+    padding: 0 0.25rem;
+    transition: color 0.15s;
+}
+.chord-nav-btn:hover { color: var(--sb-chord); }
+.chord-nav-counter {
+    min-width: 2.8em;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
 }
 
 /* --- Всплывающая схема аккорда при наведении --- */
@@ -330,13 +369,20 @@ pre.song-text {
     position: fixed;
     z-index: 1000;
     display: none;
-    width: 150px;
+    width: 180px;
     background-color: var(--sb-bg-card);
     border: 1px solid var(--sb-border);
     border-radius: 6px;
-    padding: 4px;
+    padding: 6px;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45);
     pointer-events: none;
+}
+.chord-tooltip-title {
+    text-align: center;
+    color: var(--sb-chord);
+    font-weight: 700;
+    font-size: 0.8rem;
+    margin-bottom: 0.2rem;
 }
 .chord-tooltip svg {
     display: block;
