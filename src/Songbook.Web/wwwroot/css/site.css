@@ -266,38 +266,40 @@ pre.song-text {
     min-width: 0;
 }
 .chord-panel {
-    flex: 0 0 210px;
-    width: 210px;
+    flex: 0 0 290px;
+    width: 290px;
     position: sticky;
     top: 1rem;
-    max-height: calc(100vh - 5rem);
-    overflow-y: auto;
     background-color: var(--sb-bg-card);
     border: 1px solid var(--sb-border);
     border-radius: 6px;
-    padding: 0.75rem;
+    padding: 0.6rem;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.35rem;
 }
 .chord-panel-title {
+    grid-column: 1 / -1;
     font-size: 0.7rem;
     text-transform: uppercase;
     letter-spacing: 0.08em;
     color: var(--sb-text-muted);
-    margin-bottom: 0.6rem;
-    padding-bottom: 0.4rem;
+    margin-bottom: 0.2rem;
+    padding-bottom: 0.35rem;
     border-bottom: 1px solid var(--sb-border);
 }
 @media (max-width: 767px) {
     .song-layout { flex-direction: column; }
-    .chord-panel { flex: none; width: 100%; position: static; max-height: none; }
+    .chord-panel { flex: none; width: 100%; position: static; }
 }
 
 /* --- Группа аккорда в панели --- */
 .chord-group {
-    margin-bottom: 0.75rem;
-    padding: 0.3rem 0.4rem;
+    padding: 0.2rem;
     border-radius: 4px;
     border: 1px solid transparent;
     transition: background-color 0.2s, border-color 0.2s;
+    min-width: 0;
 }
 .chord-group.is-active {
     background-color: rgba(232, 168, 56, 0.12);
@@ -305,10 +307,11 @@ pre.song-text {
 }
 .chord-group-name {
     font-weight: 700;
-    font-size: 0.8rem;
+    font-size: 0.7rem;
     text-transform: uppercase;
     color: var(--sb-chord);
-    margin-bottom: 0.3rem;
+    text-align: center;
+    margin-bottom: 0.15rem;
 }
 
 /* --- SVG-Diagramm des Akkords --- */
