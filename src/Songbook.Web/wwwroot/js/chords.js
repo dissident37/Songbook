@@ -67,7 +67,7 @@
         var base = position.baseFret || 1;
         for (var s = 0; s < frets.length; s++) {
             var fret = frets[s];
-            var str = s + 1;
+            var str = frets.length - s; // string 1 = high E (top), string 6 = low E (bottom)
             if (fret === -1) {
                 fingers.push([str, 'x']);
             } else if (fret === 0) {
